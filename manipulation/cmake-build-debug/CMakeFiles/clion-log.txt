@@ -1,0 +1,49 @@
+/home/lorenzo/Programs/clion-2019.1.4/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/lorenzo/UWSim/src/Perception_and_Manipulation/manipulation
+-- Using CATKIN_DEVEL_PREFIX: /home/lorenzo/UWSim/src/Perception_and_Manipulation/manipulation/cmake-build-debug/devel
+-- Using CMAKE_PREFIX_PATH: /home/lorenzo/UWSim/devel_isolated
+-- Using PYTHON_EXECUTABLE: /usr/bin/python
+-- Using Debian Python package layout
+-- Using empy: /usr/bin/empy
+-- Using CATKIN_ENABLE_TESTING: ON
+-- Call enable_testing()
+-- Using CATKIN_TEST_RESULTS_DIR: /home/lorenzo/UWSim/src/Perception_and_Manipulation/manipulation/cmake-build-debug/test_results
+-- Found gmock sources under '/usr/src/gmock': gmock will be built
+-- Found gtest sources under '/usr/src/gmock': gtests will be built
+-- Using Python nosetests: /usr/bin/nosetests-2.7
+-- catkin 0.7.18
+-- BUILD_SHARED_LIBS is on
+-- Using these message generators: 
+-- Boost version: 1.58.0
+-- Found the following Boost libraries:
+--   thread
+--   program_options
+--   system
+--   filesystem
+--   chrono
+--   date_time
+--   atomic
+-- Configuring done
+CMake Warning at CMakeLists.txt:220 (add_executable):
+  Cannot generate a safe runtime search path for target gotoBox because there
+  is a cycle in the constraint graph:
+
+    dir 0 is [/opt/ros/kinetic/lib]
+    dir 1 is [/usr/lib/x86_64-linux-gnu/hdf5/serial/lib]
+    dir 2 is [/home/lorenzo/UWSim/devel_isolated/uwsim_osgocean/lib]
+      dir 6 must precede it due to runtime library [libosgOcean.so]
+    dir 3 is [/home/lorenzo/UWSim/devel_isolated/uwsim_osgworks/lib]
+      dir 6 must precede it due to runtime library [libosgwTools.so.3.00.00]
+    dir 4 is [/home/lorenzo/UWSim/devel_isolated/uwsim_osgbullet/lib]
+      dir 6 must precede it due to runtime library [libosgbCollision.so.3.00.00]
+    dir 5 is [/home/lorenzo/UWSim/devel_isolated/uwsim/lib]
+    dir 6 is [/home/lorenzo/UWSim/install_isolated/lib]
+      dir 2 must precede it due to runtime library [libosgOcean.so]
+      dir 3 must precede it due to runtime library [libosgwTools.so.3.00.00]
+      dir 4 must precede it due to runtime library [libosgbCollision.so.3.00.00]
+      dir 5 must precede it due to runtime library [libuwsim.so]
+
+  Some of these libraries may not be found correctly.
+
+
+-- Generating done
+-- Build files have been written to: /home/lorenzo/UWSim/src/Perception_and_Manipulation/manipulation/cmake-build-debug
