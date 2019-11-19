@@ -111,8 +111,8 @@
 
 
   <!-- The export tag contains other, unspecified, tags -->
-  <export>
-    <uwsim plugin="${prefix}/simdev_plugins.xml" />
+<!--  <export> -->
+<!--    <uwsim plugin="${prefix}/simdev_plugins.xml" /> -->
 
-  </export>
+<!--  </export> -->
 </package>

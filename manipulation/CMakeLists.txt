@@ -3,7 +3,7 @@ project(manipulation)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
-#set(CMAKE_PREFIX_PATH "/home/lorenzo/UWSim/devel_isolated")
+set(CMAKE_PREFIX_PATH "/home/lorenzo/UWSim/install_isolated")
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -22,7 +22,7 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   sensor_msgs
   tf
-  underwater_sensor_msgs
+  #underwater_sensor_msgs
   urdf
   xacro
 )
