@@ -42,6 +42,11 @@ void vehiclePoseCallback(const nav_msgs::Odometry& odom) {
 }
 
 int main(int argc, char **argv) {
+
+    if (argc!=3) {
+        std::cerr << "USAGE: " << argv[0] << " <vehiclePoseTopic> <vehicleControlTopic>" << std::endl;
+        return 0;
+    }
 	
 
 	std::string poseTopic(argv[1]);
@@ -54,7 +59,7 @@ int main(int argc, char **argv) {
 	double yaw = 0.0;
 	
 	std::string nodeName=controlTopic;
-	nodeName.replace(0,1,"4");
+	nodeName.replace(0,19,"_");
 	nodeName = "gotoBox" + nodeName;
 	ros::init(argc, argv, nodeName);
 	ros::NodeHandle nh;

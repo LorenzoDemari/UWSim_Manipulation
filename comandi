@@ -1,0 +1,23 @@
+rosrun uwsim uwsim --configfile data/scenes/myscene.xml
+
+# posizione joints
+rostopic echo /uwsim/TRIDENT_joinstate
+
+rosrun uwsim gotoAbsolutePose <currentPosition> <controlTopic> <xgoal> <ygoal> <zgoal> <pgoal> <ygoal> <rgoal>
+
+rosrun uwsim gotoAbsolutePose /uwsim/girona500_odom_RAUVI /dataNavigator_G500RAUVI -3.71749210358 0.756697952747 -11.4344186783 1.77 3.14 0.0
+
+rosrun uwsim gotoAbsolutePose /uwsim/girona500_odom_RAUVI /dataNavigator_G500RAUVI /xbox /ybox /zbox /pitch /yaw /roll
+________________________________________________________________________________________________________________________________________________
+
+
+FINALI
+
+# Terminale1
+rosrun uwsim uwsim --configfile data/scenes/myscene.xml
+
+#Terminale2
+rosrun manipulation gotoBox /uwsim/girona500_odom_RAUVI /dataNavigator_G500RAUVI
+
+# Terminale3
+rosrun manipulation goalDetection
