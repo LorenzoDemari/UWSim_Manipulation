@@ -31,6 +31,8 @@ int main (int argc, char **argv)
     arma::Mat<double> j2_transf_matrix(4, 4, arma::fill::eye);
     arma::Mat<double> j3_transf_matrix(4, 4, arma::fill::eye);
     arma::Mat<double> j4_transf_matrix(4, 4, arma::fill::eye);
+    arma::Mat<double> jacobian(6, 4, arma::fill::zeros);
+
 
 
 
@@ -52,7 +54,7 @@ int main (int argc, char **argv)
                   << matrix[2] << matrix[6] << matrix[10] << matrix[14] << arma::endr
                   << matrix[3] << matrix[7] << matrix[11] << matrix[15] << arma::endr;
 
-            arma::cout << goal_transf_matrix << arma::endl << arma::endl;
+            //arma::cout << goal_transf_matrix << arma::endl << arma::endl;
 
         }
         catch (tf::TransformException &ex100) {
@@ -70,7 +72,7 @@ int main (int argc, char **argv)
                              << matrix[2] << matrix[6] << matrix[10] << matrix[14] << arma::endr
                              << matrix[3] << matrix[7] << matrix[11] << matrix[15] << arma::endr;
 
-            arma::cout << j1_transf_matrix << arma::endl << arma::endl;
+            arma::cout << "part1" << arma::endl << j1_transf_matrix << arma::endl << arma::endl;
 
         }
         catch (tf::TransformException &ex100) {
@@ -88,7 +90,7 @@ int main (int argc, char **argv)
                              << matrix[2] << matrix[6] << matrix[10] << matrix[14] << arma::endr
                              << matrix[3] << matrix[7] << matrix[11] << matrix[15] << arma::endr;
 
-            arma::cout << j1_transf_matrix << arma::endl << arma::endl;
+            //arma::cout << j1_transf_matrix << arma::endl << arma::endl;
 
         }
         catch (tf::TransformException &ex100) {
@@ -106,7 +108,7 @@ int main (int argc, char **argv)
                              << matrix[2] << matrix[6] << matrix[10] << matrix[14] << arma::endr
                              << matrix[3] << matrix[7] << matrix[11] << matrix[15] << arma::endr;
 
-            arma::cout << j1_transf_matrix << arma::endl << arma::endl;
+            //arma::cout << j1_transf_matrix << arma::endl << arma::endl;
 
         }
         catch (tf::TransformException &ex100) {
@@ -114,8 +116,8 @@ int main (int argc, char **argv)
         }
 
         try {
-            listener.waitForTransform("girona500_RAUVI/kinematic_base", "girona500_RAUVI/part4", ros::Time(0), ros::Duration(0.00005));
-            listener.lookupTransform("girona500_RAUVI/kinematic_base", "girona500_RAUVI/part4", ros::Time(0), BwrtW);
+            listener.waitForTransform("girona500_RAUVI/kinematic_base", "girona500_RAUVI/part4_base", ros::Time(0), ros::Duration(0.00005));
+            listener.lookupTransform("girona500_RAUVI/kinematic_base", "girona500_RAUVI/part4_base", ros::Time(0), BwrtW);
 
             BwrtW.getOpenGLMatrix(matrix);
 
@@ -124,12 +126,23 @@ int main (int argc, char **argv)
                              << matrix[2] << matrix[6] << matrix[10] << matrix[14] << arma::endr
                              << matrix[3] << matrix[7] << matrix[11] << matrix[15] << arma::endr;
 
-            arma::cout << j1_transf_matrix << arma::endl << arma::endl;
+            //arma::cout << j1_transf_matrix << arma::endl << arma::endl;
 
         }
         catch (tf::TransformException &ex100) {
             ROS_ERROR("%s", ex100.what());
         }
+
+        arma::Col<double> ki(3);
+        ki << j1_transf_matrix(0,2) << j1_transf_matrix(1,2) << j1_transf_matrix(2,2);
+        for (int i=0; i<3; i++){
+            jacobian(i,0)=j1_transf_matrix(i,2);
+        }
+
+        arma::cout << "jacobian" << arma::endl << jacobian << arma::endl << arma::endl;
+        arma::cout << "COLONNA" << arma::endl << ki << arma::endl << arma::endl;
+
+
 
 
 
