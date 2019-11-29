@@ -6,10 +6,12 @@
 #include <tf/transform_listener.h>
 #include <math.h>
 #include <sstream>
-
-//#include <fstream>
-
-
+#include <cmath>
+#include <iostream>
+#include <LinearMath/btQuaternion.h>
+#include <LinearMath/btTransform.h>
+#include <LinearMath/btMatrixX.h>
+#include "/usr/include/armadillo"
 
 int main (int argc, char **argv) 
 {
@@ -22,6 +24,18 @@ int main (int argc, char **argv)
     double B_y = 0.0;
     double B_z = 0.0;
 
+    double B_1 = 0.0;
+    double B_2 = 0.0;
+    double B_3 = 0.0;
+    double B_w = 0.0;
+
+
+    tfScalar matrix[2];
+
+    arma::Mat<double> goal_transf_matrix(4, 4, arma::fill::eye);
+    //double d = det(goal_transf_matrix);
+    //ROS_INFO("%f", d);
+
     ros::Rate rate(10.0);
 
     while(n.ok()) {
@@ -30,16 +44,24 @@ int main (int argc, char **argv)
 	    listener.waitForTransform("/world", "blackbox", ros::Time(0), ros::Duration(0.00005));
 	    listener.lookupTransform("/world", "blackbox", ros::Time(0), BwrtW);
 
-	    B_x = BwrtW.getOrigin().x();
-	    B_y = BwrtW.getOrigin().y();
-	    B_z = BwrtW.getOrigin().z();
+        BwrtW.getOpenGLMatrix(matrix);
 
-	//    BwrtW.getRotation().x();
-	//    BwrtW.getRotation().y();
-	//    BwrtW.getRotation().z();
-	//    BwrtW.getRotation().w();
+        goal_transf_matrix << matrix[0] << matrix[4] << matrix[8] << matrix[12] << arma::endr
+              << matrix[1] << matrix[5] << matrix[9] << matrix[13] << arma::endr
+              << matrix[2] << matrix[6] << matrix[10] << matrix[14] << arma::endr
+              << matrix[3] << matrix[7] << matrix[11] << matrix[15] << arma::endr;
 
-	    nav_msgs::Odometry pos;
+        arma::cout << goal_transf_matrix << arma::endl << arma::endl;
+
+
+
+
+
+        B_x = BwrtW.getOrigin().x();
+        B_y = BwrtW.getOrigin().y();
+        B_z = BwrtW.getOrigin().z();
+
+        nav_msgs::Odometry pos;
 
 	    pos.pose.pose.position.x = B_x;
 	    pos.pose.pose.position.y = B_y;
@@ -56,6 +78,8 @@ int main (int argc, char **argv)
 	    ros::param::set("/pitch", 3.14);
 	    ros::param::set("/yaw", 3.14);
 	    ros::param::set("/roll", 0.0);
+
+
 	}
 
 	catch (tf::TransformException &ex100) {

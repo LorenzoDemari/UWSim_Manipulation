@@ -3,7 +3,7 @@ project(manipulation)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
-set(CMAKE_PREFIX_PATH "/home/lorenzo/UWSim/install_isolated")
+#set(CMAKE_PREFIX_PATH "/home/lorenzo/UWSim/install_isolated")
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -28,7 +28,7 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 ## System dependencies are found with CMake's conventions
-# find_package(Boost REQUIRED COMPONENTS system)
+#find_package(Boost REQUIRED COMPONENTS system)
 find_package(Boost REQUIRED thread program_options system filesystem)
 find_package(OpenSceneGraph COMPONENTS osgSim osgUtil osgDB osgFX osgGA osgTerrain osgViewer osgText osgWidget osg osgParticle osgManipulator)
 find_package(osg_markers REQUIRED)
@@ -217,6 +217,7 @@ add_library(manipulation
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/manipulation_node.cpp)
 add_executable(goalDetection src/goalDetection.cpp)
+add_executable(InverseKinematicProblem src/InverseKinematicProblem.cpp)
 add_executable(gotoBox src/gotoBox.cpp)
 
 ## Rename C++ executable without prefix
@@ -231,9 +232,9 @@ add_executable(gotoBox src/gotoBox.cpp)
 #add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(goalDetection ${catkin_LIBRARIES})
-target_link_libraries(gotoBox ${catkin_LIBRARIES} ${Boost_LIBRARIES} ${OSGOCEAN_LIBRARIES} ${OSGWORKS_LIBRARIES} ${OSGBULLET_LIBRARIES} ${BULLET_LIBRARIES} ${OPENSCENEGRAPH_LIBRARIES} ${LIBXML++_LIBRARIES} ${OSGUTILS_LIBRARIES} ${OSGINTERACTIVEMARKERS_LIBRARIES} ${OSGMARKERS_LIBRARIES} ${uwsim_LIBRARIES} ${underwater_sensor_msgs_LIBRARIES} -lGLU )
-
+target_link_libraries(goalDetection ${catkin_LIBRARIES} lapack blas armadillo)
+target_link_libraries(InverseKinematicProblem ${catkin_LIBRARIES} lapack blas armadillo)
+target_link_libraries(gotoBox ${catkin_LIBRARIES} ${Boost_LIBRARIES} ${OSGOCEAN_LIBRARIES} ${OSGWORKS_LIBRARIES} ${OSGBULLET_LIBRARIES} ${BULLET_LIBRARIES} ${OPENSCENEGRAPH_LIBRARIES} ${LIBXML++_LIBRARIES} ${OSGUTILS_LIBRARIES} ${OSGINTERACTIVEMARKERS_LIBRARIES} ${OSGMARKERS_LIBRARIES} ${uwsim_LIBRARIES} ${underwater_sensor_msgs_LIBRARIES} -lGLU)
 #############
 ## Install ##
 #############
@@ -260,6 +261,7 @@ install(
    TARGETS 
         goalDetection
         gotoBox
+        InverseKinematicProblem
    ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
