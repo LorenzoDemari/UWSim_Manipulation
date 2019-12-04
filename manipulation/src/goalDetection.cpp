@@ -24,10 +24,10 @@ int main (int argc, char **argv)
     double B_y = 0.0;
     double B_z = 0.0;
 
-    double B_1 = 0.0;
-    double B_2 = 0.0;
-    double B_3 = 0.0;
-    double B_w = 0.0;
+    double B_r_x = 0.0;
+    double B_r_y = 0.0;
+    double B_r_z = 0.0;
+    double B_r_w = 0.0;
 
 
     tfScalar matrix[2];
@@ -54,12 +54,14 @@ int main (int argc, char **argv)
         arma::cout << goal_transf_matrix << arma::endl << arma::endl;
 
 
-
-
-
         B_x = BwrtW.getOrigin().x();
         B_y = BwrtW.getOrigin().y();
         B_z = BwrtW.getOrigin().z();
+
+        B_r_x = BwrtW.getRotation().x();
+        B_r_y = BwrtW.getRotation().y();
+        B_r_z = BwrtW.getRotation().z();
+        B_r_w = BwrtW.getRotation().w();
 
         nav_msgs::Odometry pos;
 
@@ -74,10 +76,13 @@ int main (int argc, char **argv)
 
 	    ros::param::set("/xbox", B_x);
 	    ros::param::set("/ybox", B_y);
-	    ros::param::set("/zbox", B_z + 2.0);
-	    ros::param::set("/pitch", 3.14);
-	    ros::param::set("/yaw", 3.14);
-	    ros::param::set("/roll", 0.0);
+	    ros::param::set("/zbox", B_z + 2);
+        ros::param::set("/pitch", 0.0);
+        ros::param::set("/yaw", -1*B_r_y);
+        ros::param::set("/roll", 3.14);
+//	    ros::param::set("/pitch", 3.14);
+//	    ros::param::set("/yaw", 3.14);
+//	    ros::param::set("/roll", 0.0);
 
 
 	}

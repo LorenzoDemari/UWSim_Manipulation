@@ -64,23 +64,23 @@ int main(int argc, char **argv) {
 	ros::init(argc, argv, nodeName);
 	ros::NodeHandle nh;
 
-	nh.getParam("/xbox", x);
-	nh.getParam("/ybox", y);
-	nh.getParam("/zbox", z);
-	nh.getParam("/roll", roll);
-	nh.getParam("/pitch", pitch);
-	nh.getParam("/yaw", yaw);
-	ROS_INFO("%f %f %f \n", x, y, z);
-	ROS_INFO("%f %f %f", roll, pitch, yaw);
+//	nh.getParam("/xbox", x);
+//	nh.getParam("/ybox", y);
+//	nh.getParam("/zbox", z);
+//	nh.getParam("/roll", roll);
+//	nh.getParam("/pitch", pitch);
+//	nh.getParam("/yaw", yaw);
+//	ROS_INFO("%f %f %f \n", x, y, z);
+//	ROS_INFO("%f %f %f", roll, pitch, yaw);
 
 	osg::Matrixd T, Rx, Ry, Rz, transform;
-	T.makeTranslate(x,y,z);
-	Rx.makeRotate(roll,1,0,0);
-	Ry.makeRotate(pitch,0,1,0);
-	Rz.makeRotate(yaw,0,0,1);
-	transform=Rz*Ry*Rx*T;
-	goalT=transform.getTrans();
-	goalQ=transform.getRotate();
+//	T.makeTranslate(x,y,z);
+//	Rx.makeRotate(roll,1,0,0);
+//	Ry.makeRotate(pitch,0,1,0);
+//	Rz.makeRotate(yaw,0,0,1);
+//	transform=Rz*Ry*Rx*T;
+//	goalT=transform.getTrans();
+//	goalQ=transform.getRotate();
 
 	ros::Publisher position_pub=nh.advertise<nav_msgs::Odometry>(controlTopic,1);
 	ros::Subscriber position_sub = nh.subscribe(poseTopic, 1, vehiclePoseCallback);
@@ -88,6 +88,24 @@ int main(int argc, char **argv) {
 	ros::Rate r(30);
     ros::Duration(3.0).sleep();
     while (ros::ok()) {
+
+        nh.getParam("/xbox", x);
+        nh.getParam("/ybox", y);
+        nh.getParam("/zbox", z);
+        nh.getParam("/roll", roll);
+        nh.getParam("/pitch", pitch);
+        nh.getParam("/yaw", yaw);
+        ROS_INFO("%f %f %f \n", x, y, z);
+        ROS_INFO("%f %f %f", roll, pitch, yaw);
+
+        T.makeTranslate(x,y,z);
+        Rx.makeRotate(roll,1,0,0);
+        Ry.makeRotate(pitch,0,1,0);
+        Rz.makeRotate(yaw,0,0,1);
+        transform=Rz*Ry*Rx*T;
+        goalT=transform.getTrans();
+        goalQ=transform.getRotate();
+
         if (firstpass) {
 		osg::Vec3d vT=(goalT-currentT)*0.15;
 		double vScale=(vT.length()>0.1) ? 0.1/vT.length() : 1;
