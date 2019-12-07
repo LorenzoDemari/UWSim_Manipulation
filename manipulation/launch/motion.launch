@@ -1,0 +1,18 @@
+<launch>
+
+	<include file="$(find manipulation)/launch/static_transforms.launch" />
+
+	<arg name="name1" default="RAUVI1" />
+	<arg name="name2" default="RAUVI2" />
+	<arg name="goal1" default="goal1" />
+	<arg name="goal2" default="goal2" />
+
+
+	<node name="detection" pkg="manipulation" type="goalDetection" respawn="false" output="screen" />
+	<node name="motion1" pkg="manipulation" type="gotoBox" respawn="false" output="screen" args="$(arg name1)" />
+	<node name="motion2" pkg="manipulation" type="gotoBox" respawn="false" output="screen" args="$(arg name2)" />
+	
+	<node name="IKP1" pkg="manipulation" type="InverseKinematicProblem" respawn="false" output="screen" args="$(arg name1) $(arg goal1)" />
+	<node name="IKP2" pkg="manipulation" type="InverseKinematicProblem" respawn="false" output="screen" args="$(arg name2) $(arg goal2)" />
+
+</launch>

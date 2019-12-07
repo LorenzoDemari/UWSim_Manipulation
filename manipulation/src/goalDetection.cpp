@@ -11,7 +11,8 @@
 #include <LinearMath/btQuaternion.h>
 #include <LinearMath/btTransform.h>
 #include <LinearMath/btMatrixX.h>
-#include "/usr/include/armadillo"
+#include <armadillo>
+#include <tf/transform_broadcaster.h>
 
 int main (int argc, char **argv) 
 {
@@ -19,15 +20,29 @@ int main (int argc, char **argv)
     ros::NodeHandle n;
 
     tf::TransformListener listener;
-    tf::StampedTransform BwrtW;
-    double B_x = 0.0;
-    double B_y = 0.0;
-    double B_z = 0.0;
+//    tf::TransformBroadcaster goal1;
+//    tf::TransformBroadcaster goal2;
 
-    double B_r_x = 0.0;
-    double B_r_y = 0.0;
-    double B_r_z = 0.0;
-    double B_r_w = 0.0;
+    tf::StampedTransform BwrtW1;
+    tf::StampedTransform BwrtW2;
+
+    double B_x1 = 0.0;
+    double B_y1 = 0.0;
+    double B_z1 = 0.0;
+
+    double B_r_x1 = 0.0;
+    double B_r_y1 = 0.0;
+    double B_r_z1 = 0.0;
+    double B_r_w1 = 0.0;
+
+    double B_x2 = 0.0;
+    double B_y2 = 0.0;
+    double B_z2 = 0.0;
+
+    double B_r_x2 = 0.0;
+    double B_r_y2 = 0.0;
+    double B_r_z2 = 0.0;
+    double B_r_w2 = 0.0;
 
 
     tfScalar matrix[2];
@@ -41,55 +56,58 @@ int main (int argc, char **argv)
     while(n.ok()) {
 	ros::Duration(1.0).sleep();
 	try {
-	    listener.waitForTransform("/world", "blackbox", ros::Time(0), ros::Duration(0.00005));
-	    listener.lookupTransform("/world", "blackbox", ros::Time(0), BwrtW);
+	    listener.waitForTransform("/world", "goal1", ros::Time(0), ros::Duration(0.00005));
+	    listener.lookupTransform("/world", "goal1", ros::Time(0), BwrtW1);
 
-        BwrtW.getOpenGLMatrix(matrix);
+        B_x1 = BwrtW1.getOrigin().x();
+        B_y1 = BwrtW1.getOrigin().y();
+        B_z1 = BwrtW1.getOrigin().z();
 
-        goal_transf_matrix << matrix[0] << matrix[4] << matrix[8] << matrix[12] << arma::endr
-              << matrix[1] << matrix[5] << matrix[9] << matrix[13] << arma::endr
-              << matrix[2] << matrix[6] << matrix[10] << matrix[14] << arma::endr
-              << matrix[3] << matrix[7] << matrix[11] << matrix[15] << arma::endr;
-
-        arma::cout << goal_transf_matrix << arma::endl << arma::endl;
+        B_r_x1 = BwrtW1.getRotation().x();
+        B_r_y1 = BwrtW1.getRotation().y();
+        B_r_z1 = BwrtW1.getRotation().z();
+        B_r_w1 = BwrtW1.getRotation().w();
 
 
-        B_x = BwrtW.getOrigin().x();
-        B_y = BwrtW.getOrigin().y();
-        B_z = BwrtW.getOrigin().z();
-
-        B_r_x = BwrtW.getRotation().x();
-        B_r_y = BwrtW.getRotation().y();
-        B_r_z = BwrtW.getRotation().z();
-        B_r_w = BwrtW.getRotation().w();
-
-        nav_msgs::Odometry pos;
-
-	    pos.pose.pose.position.x = B_x;
-	    pos.pose.pose.position.y = B_y;
-	    pos.pose.pose.position.z = B_z;
-
-	    pos.pose.pose.orientation.x = 1.77;
-	    pos.pose.pose.orientation.y = 3.14;
-	    pos.pose.pose.orientation.z = 0.0;
-	    pos.pose.pose.orientation.w = 0.0;
-
-	    ros::param::set("/xbox", B_x);
-	    ros::param::set("/ybox", B_y);
-	    ros::param::set("/zbox", B_z + 2);
+	    ros::param::set("/xbox1", B_x1 + cos(-1*B_r_y1)*0.4);
+	    ros::param::set("/ybox1", B_y1 + sin(-1*B_r_y1)*0.4);
+	    ros::param::set("/zbox1", B_z1 + 1.9);
         ros::param::set("/pitch", 0.0);
-        ros::param::set("/yaw", -1*B_r_y);
+        ros::param::set("/yaw", B_r_x1);
         ros::param::set("/roll", 3.14);
-//	    ros::param::set("/pitch", 3.14);
-//	    ros::param::set("/yaw", 3.14);
-//	    ros::param::set("/roll", 0.0);
-
 
 	}
 
 	catch (tf::TransformException &ex100) {
 	ROS_ERROR("%s", ex100.what());
 	}
+
+    try {
+        listener.waitForTransform("/world", "goal2", ros::Time(0), ros::Duration(0.00005));
+        listener.lookupTransform("/world", "goal2", ros::Time(0), BwrtW2);
+
+        B_x2 = BwrtW2.getOrigin().x();
+        B_y2 = BwrtW2.getOrigin().y();
+        B_z2 = BwrtW2.getOrigin().z();
+
+        B_r_x2 = BwrtW2.getRotation().x();
+        B_r_y2 = BwrtW2.getRotation().y();
+        B_r_z2 = BwrtW2.getRotation().z();
+        B_r_w2 = BwrtW2.getRotation().w();
+
+
+        ros::param::set("/xbox2", B_x2 + cos(-1*B_r_y2)*0.4);
+        ros::param::set("/ybox2", B_y2 + sin(-1*B_r_y2)*0.4);
+        ros::param::set("/zbox2", B_z2 + 1.9);
+//        ros::param::set("/pitch", 0.0);
+//        ros::param::set("/yaw", -1*B_r_y2);
+//        ros::param::set("/roll", 3.14);
+
+    }
+
+    catch (tf::TransformException &ex100) {
+        ROS_ERROR("%s", ex100.what());
+    }
 
 	ros::spinOnce();
 

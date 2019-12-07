@@ -21,3 +21,7 @@ rosrun manipulation gotoBox /uwsim/girona500_odom_RAUVI /dataNavigator_G500RAUVI
 
 # Terminale3
 rosrun manipulation goalDetection
+
+rosrun uwsim setJointVelocity /uwsim/RAUVI1_joint_state_command 0 0 0 0 0
+rosrun uwsim setJointVelocity /uwsim/RAUVI2_joint_state_command 0 0 0 0 0
+
