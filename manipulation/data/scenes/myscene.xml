@@ -6,7 +6,7 @@
   <oceanState>
     <windx> 1.0 </windx>
     <windy> 1.0 </windy>
-    <windSpeed> 12 </windSpeed>
+    <windSpeed> 0 </windSpeed>
     <depth> 1000 </depth>
     <reflectionDamping> 0.35 </reflectionDamping>
     <waveScale> 1e-8 </waveScale>
@@ -43,45 +43,45 @@
 
   <camera>
     <freeMotion> 1 </freeMotion>
-    <objectToTrack>girona500_RAUVI/base_link</objectToTrack>
+    <objectToTrack>girona500_RAUVI1/base_link</objectToTrack>
     <fov> 60 </fov>
     <aspectRatio> 1.33 </aspectRatio>
     <near> 1 </near>
     <far> 10000 </far>
     <position>
-      <x>10</x>
-      <y>0 </y>
-      <z>-7 </z>
+      <x>-5</x>
+      <y>-5 </y>
+      <z>8 </z>
     </position> 
     <lookAt>
       <x>0</x>
       <y>0 </y>
-      <z>-10 </z>
+      <z>0 </z>
     </lookAt>
   </camera>
 
  <vehicle>
-    <name>girona500_RAUVI</name>
+    <name>girona500_RAUVI1</name>
     <file>data/scenes/g500ARM5.urdf</file>
     <jointValues>
       <joint> 0 </joint>
-      <joint> M_PI_4</joint>
-      <joint> M_PI_4 </joint>
+      <joint> 0</joint>
       <joint> 0 </joint>
-      <joint>-0.3 </joint>
+      <joint> 0 </joint>
+      <joint> 0 </joint>
     </jointValues>
     <position>
-      <x> 0</x>
-      <y> 5 </y>
-      <z> -10 </z>
+      <x> -5 </x>
+      <y> -5 </y>
+      <z> -4 </z>
     </position>
     <orientation>
       <r>3.1415</r>
       <p>0 </p>
-      <y>1.77 </y>
+      <y>1.57 </y>
     </orientation>
     <ForceSensor>
-       <name>ForceG500RAUVI</name>
+       <name>ForceG500RAUVI1</name>
        <target>base_link</target>
        <offsetp>
        <x>-0.2</x>
@@ -97,27 +97,27 @@
   </vehicle>
 
   <vehicle>
-    <name>girona500_TRIDENT</name>
+    <name>girona500_RAUVI2</name>
     <file>data/scenes/g500ARM5.urdf</file>
     <jointValues>
       <joint> 0 </joint>
-      <joint> M_PI_4</joint>
-      <joint> M_PI_4 </joint>
+      <joint> 0</joint>
       <joint> 0 </joint>
-      <joint>-0.3 </joint>
+      <joint> 0 </joint>
+      <joint> 0 </joint>
     </jointValues>
     <position>
-      <x> 0</x>
-      <y> -5 </y>
-      <z> -10 </z>
+      <x> 5</x>
+      <y> 5 </y>
+      <z> -4 </z>
     </position>
     <orientation>
       <r>3.1415</r>
       <p>0 </p>
-      <y>-1.77 </y>
+      <y>-1.57 </y>
     </orientation>
     <ForceSensor>
-       <name>ForceG500TRIDENT</name>
+       <name>ForceG500RAUVI2</name>
        <target>base_link</target>
        <offsetp>
        <x>-0.2</x>
@@ -134,21 +134,26 @@
 
   <object>
     <name> blackbox </name>
-    <file> objects/blackbox_uib_trimesh.osg  </file>
+    <file> objects/blackbox_uib_trimesh.osg </file>
     <position>
       <x> 0</x>
       <y> 0 </y>
-      <z> 0 </z>
+      <z> -11.75 </z>
     </position>
     <orientation>
       <r>0</r>
-      <p>3.1415</p>
-      <y>0</y>
+      <p>0</p>
+      <y>1.57075</y>
     </orientation>
+    <scaleFactor>
+      <x> 10</x>
+      <y> 0.4 </y>
+      <z> 0.4 </z>
+    </scaleFactor>
     <physics>
       <mass> 15 </mass>
       <inertia> 
-        <x> 0</x>
+        <x> 0 </x>
         <y> 0 </y>
         <z> 0 </z>
       </inertia>
@@ -158,7 +163,7 @@
 
   <object>
     <name> terrain </name>
-    <file> terrain/seafloor/terrain_noship.ive </file>
+    <file> terrain/CIRS/cirs_trident.osg </file>
     <position>
       <x> 0</x>
       <y> 0 </y>
@@ -169,29 +174,33 @@
       <p>0 </p>
       <y>0 </y>
     </orientation>
+    <scaleFactor>
+      <x> 2.5 </x>
+      <y> 2.5 </y>
+      <z> 2.5 </z>
+    </scaleFactor>
     <physics>
       <mass> 0 </mass>
       <collisionShapeType> trimesh </collisionShapeType>
-      <isKinematic> no </isKinematic>
     </physics>
   </object>
 
   <rosInterfaces>
     <ROSOdomToPAT>
-      <topic> /dataNavigator_G500RAUVI </topic>
-      <vehicleName> girona500_RAUVI </vehicleName>
+      <topic> /dataNavigator_G500RAUVI1 </topic>
+      <vehicleName> girona500_RAUVI1 </vehicleName>
     </ROSOdomToPAT>
     <ROSOdomToPAT>
-      <topic> /dataNavigator_G500TRIDENT </topic>
-      <vehicleName> girona500_TRIDENT </vehicleName>
+      <topic> /dataNavigator_G500RAUVI2 </topic>
+      <vehicleName> girona500_RAUVI2 </vehicleName>
     </ROSOdomToPAT>
     <PATToROSOdom>
-      <topic> /uwsim/girona500_odom_RAUVI </topic>
-      <vehicleName> girona500_RAUVI </vehicleName>
+      <topic> /uwsim/girona500_odom_RAUVI1 </topic>
+      <vehicleName> girona500_RAUVI1 </vehicleName>
     </PATToROSOdom>
     <PATToROSOdom>
-      <topic> /uwsim/girona500_odom_TRIDENT </topic>
-      <vehicleName> girona500_TRIDENT </vehicleName>
+      <topic> /uwsim/girona500_odom_RAUVI2 </topic>
+      <vehicleName> girona500_RAUVI2 </vehicleName>
     </PATToROSOdom>
     <WorldToROSTF>
       <rootName> world </rootName>
@@ -199,29 +208,29 @@
       <rate>10</rate>
     </WorldToROSTF>
     <ArmToROSJointState> 
-	<topic>/uwsim/RAUVI_joint_state</topic>
-	<vehicleName> girona500_RAUVI </vehicleName>
+	<topic>/uwsim/RAUVI1_joint_state</topic>
+	<vehicleName> girona500_RAUVI1 </vehicleName>
     </ArmToROSJointState>
     <ArmToROSJointState> 
-	<topic>/uwsim/TRIDENT_joint_state</topic>
-	<vehicleName> girona500_TRIDENT </vehicleName>
+	<topic>/uwsim/RAUVI2_joint_state</topic>
+	<vehicleName> girona500_RAUVI2 </vehicleName>
     </ArmToROSJointState>
     <ROSJointStateToArm> 
-	<topic>/uwsim/RAUVI_joint_state_command</topic>
-	<vehicleName> girona500_RAUVI </vehicleName>
+	<topic>/uwsim/RAUVI1_joint_state_command</topic>
+	<vehicleName> girona500_RAUVI1 </vehicleName>
     </ROSJointStateToArm>
     <ROSJointStateToArm> 
-	<topic>/uwsim/TRIDENT_joint_state_command</topic>
-	<vehicleName> girona500_TRIDENT </vehicleName>
+	<topic>/uwsim/RAUVI2_joint_state_command</topic>
+	<vehicleName> girona500_RAUVI2 </vehicleName>
     </ROSJointStateToArm>
     <ForceSensorROS>
-        <name>ForceG500RAUVI</name>
-        <topic>g500/ForceSensorRAUVI</topic>
+        <name>ForceG500RAUVI1</name>
+        <topic>g500/ForceSensorRAUVI1</topic>
         <rate>100</rate>
     </ForceSensorROS>
     <ForceSensorROS>
-        <name>ForceG500TRIDENT</name>
-        <topic>g500/ForceSensorTRIDENT</topic>
+        <name>ForceG500RAUVI2</name>
+        <topic>g500/ForceSensorRAUVI2</topic>
         <rate>100</rate>
     </ForceSensorROS>
   </rosInterfaces>
