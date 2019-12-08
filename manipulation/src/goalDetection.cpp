@@ -73,7 +73,7 @@ int main (int argc, char **argv)
 	    ros::param::set("/ybox1", B_y1 + sin(-1*B_r_y1)*0.4);
 	    ros::param::set("/zbox1", B_z1 + 1.9);
         ros::param::set("/pitch", 0.0);
-        ros::param::set("/yaw", B_r_x1);
+        ros::param::set("/yaw", -1*B_r_y1);
         ros::param::set("/roll", 3.14);
 
 	}

@@ -75,11 +75,14 @@ int main(int argc, char **argv) {
 
     std::string ready= "/ready"+ robot_name;
 
+    bool touch = false;
+
 
     ros::param::set(ready, false);
 
     while (ros::ok()) {
 
+        nh.getParam("/touch", touch);
         if (robot_name == "RAUVI1")
         {
             nh.getParam("/xbox1", x);
@@ -91,6 +94,10 @@ int main(int argc, char **argv) {
             nh.getParam("/xbox2", x);
             nh.getParam("/ybox2", y);
             nh.getParam("/zbox2", z);
+        }
+        if(touch)
+        {
+            z=z+1.0;
         }
         nh.getParam("/roll", roll);
         nh.getParam("/pitch", pitch);

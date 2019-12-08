@@ -2,6 +2,7 @@
 #include "ros/ros.h"
 #include "tf/LinearMath/Transform.h"
 #include "geometry_msgs/TransformStamped.h"
+#include "std_msgs/Bool.h"
 #include "nav_msgs/Odometry.h"
 #include <tf/transform_listener.h>
 #include <math.h>
@@ -15,7 +16,16 @@
 #include <sensor_msgs/JointState.h>
 //#include <asdl.h>
 
+bool touch = false;
+
 void VersorLemma(arma::Mat<double> endeff, arma::Mat<double> goal, arma::Col<double> ang_error);
+void ContactCallback(std_msgs::Bool msg)
+{
+    if (msg.data)
+    {
+        touch = true;
+    }
+}
 
 int main (int argc, char **argv) 
 {
@@ -28,6 +38,7 @@ int main (int argc, char **argv)
     std::string nodeName="InverseKinematicProblem_" + robot_name;
     std::string topic="/uwsim/" + robot_name + "_joint_state_command";
     std::string joint="girona500_" + robot_name;
+    std::string contact_topic = "g500/" + robot_name + "_contactSensor";
 //    std::string goal="blackbox";
 
     ros::init(argc, argv, nodeName);
@@ -35,6 +46,7 @@ int main (int argc, char **argv)
 
     tf::TransformListener listener;
     tf::StampedTransform transformation;
+    ros::Subscriber contact = n.subscribe(contact_topic, 1, ContactCallback);
     double qdot[5];
 
 
@@ -79,7 +91,7 @@ int main (int argc, char **argv)
 
         if (ready1 && ready2) {
 
-            ros::Duration(1.0).sleep();
+            //ros::Duration(1.0).sleep();
             try {
                 listener.waitForTransform(joint + "/kinematic_base", goal, ros::Time(0), ros::Duration(0.00005));
                 listener.lookupTransform(joint + "/kinematic_base", goal, ros::Time(0), transformation);
@@ -87,7 +99,7 @@ int main (int argc, char **argv)
                 tf::Vector3 new_goal;
                 new_goal.setX(transformation.getOrigin().x());
                 new_goal.setY(transformation.getOrigin().y());
-                new_goal.setZ(transformation.getOrigin().z() - 0.05);
+                new_goal.setZ(transformation.getOrigin().z() - 0.005);
                 transformation.setOrigin(new_goal);
                 transformation.getOpenGLMatrix(matrix);
 
@@ -272,9 +284,9 @@ int main (int argc, char **argv)
 
 
             VersorLemma(endeff_transf_matrix, goal_transf_matrix, angular_error);
-            angular_error = 0.5 * angular_error;
+            angular_error = 0.8 * angular_error;
 
-            linear_error = 0.5 * (trasl_g - trasl_e);
+            linear_error = 0.8 * (trasl_g - trasl_e);
 
             for (int i = 0; i < 3; i++)
                 error(i) = angular_error(i);
@@ -294,7 +306,7 @@ int main (int argc, char **argv)
             norm= arma::norm(error, 2);
 
             ROS_INFO("errore %f",norm);
-            if (norm < 0.03)
+            if (norm < 0.005)
             {
                 ros::param::set(grasp, true);
                 ros::param::get ("/graspRAUVI1",graspPar1);
@@ -303,7 +315,17 @@ int main (int argc, char **argv)
                 if (graspPar1 && graspPar2)
                 {
                     ROS_INFO("chiudo");
-                    qdot[4] = -0.3;
+                    if (touch)
+                    {
+                        qdot[4] = -0.1;
+			ros::Duration(0.5).sleep();
+                        n.setParam("/touch", true);
+                        ROS_INFO("stop");
+                    }
+                    else
+                    {
+                        qdot[4] = -0.5;
+                    }
                 }
             }
 
