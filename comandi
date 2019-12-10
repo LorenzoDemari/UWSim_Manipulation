@@ -5,9 +5,9 @@ rostopic echo /uwsim/TRIDENT_joinstate
 
 rosrun uwsim gotoAbsolutePose <currentPosition> <controlTopic> <xgoal> <ygoal> <zgoal> <pgoal> <ygoal> <rgoal>
 
-rosrun uwsim gotoAbsolutePose /uwsim/girona500_odom_RAUVI /dataNavigator_G500RAUVI -3.71749210358 0.756697952747 -11.4344186783 1.77 3.14 0.0
+rosrun uwsim gotoAbsolutePose /uwsim/girona500_odom_RAUVI1 /dataNavigator_G500RAUVI1 5 1 -10 3.14 0 0
 
-rosrun uwsim gotoAbsolutePose /uwsim/girona500_odom_RAUVI /dataNavigator_G500RAUVI /xbox /ybox /zbox /pitch /yaw /roll
+rosrun uwsim gotoAbsolutePose /uwsim/girona500_odom_RAUVI2 /dataNavigator_G500RAUVI2 0 -1 0 3.14 0 0
 ________________________________________________________________________________________________________________________________________________
 
 

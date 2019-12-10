@@ -69,8 +69,8 @@ int main (int argc, char **argv)
         B_r_w1 = BwrtW1.getRotation().w();
 
 
-	    ros::param::set("/xbox1", B_x1 + cos(-1*B_r_y1)*0.4);
-	    ros::param::set("/ybox1", B_y1 + sin(-1*B_r_y1)*0.4);
+	    ros::param::set("/xbox1", B_x1 + cos(-1*B_r_y1)*0.5);
+	    ros::param::set("/ybox1", B_y1 + sin(-1*B_r_y1)*0.5);
 	    ros::param::set("/zbox1", B_z1 + 1.9);
         ros::param::set("/pitch", 0.0);
         ros::param::set("/yaw", -1*B_r_y1);
@@ -96,8 +96,8 @@ int main (int argc, char **argv)
         B_r_w2 = BwrtW2.getRotation().w();
 
 
-        ros::param::set("/xbox2", B_x2 + cos(-1*B_r_y2)*0.4);
-        ros::param::set("/ybox2", B_y2 + sin(-1*B_r_y2)*0.4);
+        ros::param::set("/xbox2", B_x2 + cos(-1*B_r_y2)*0.5);
+        ros::param::set("/ybox2", B_y2 + sin(-1*B_r_y2)*0.5);
         ros::param::set("/zbox2", B_z2 + 1.9);
 //        ros::param::set("/pitch", 0.0);
 //        ros::param::set("/yaw", -1*B_r_y2);

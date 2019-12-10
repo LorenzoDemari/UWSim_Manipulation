@@ -14,14 +14,17 @@
 #include <LinearMath/btMatrixX.h>
 #include "/usr/include/armadillo"
 #include <sensor_msgs/JointState.h>
+#include "sensor_msgs/Range.h"
+#include "geometry_msgs/WrenchStamped.h"
 //#include <asdl.h>
 
 bool touch = false;
 
 void VersorLemma(arma::Mat<double> endeff, arma::Mat<double> goal, arma::Col<double> ang_error);
-void ContactCallback(std_msgs::Bool msg)
+void ContactCallback(geometry_msgs::WrenchStamped msg)
 {
-    if (msg.data)
+	//ROS_INFO("***************************** %f", msg.range);
+    if (msg.wrench.force.x != 0)
     {
         touch = true;
     }
@@ -38,7 +41,8 @@ int main (int argc, char **argv)
     std::string nodeName="InverseKinematicProblem_" + robot_name;
     std::string topic="/uwsim/" + robot_name + "_joint_state_command";
     std::string joint="girona500_" + robot_name;
-    std::string contact_topic = "g500/" + robot_name + "_contactSensor";
+    std::string contact_topic = "/g500/ForceSensor";
+//    std::string contact_topic = "g500/" + robot_name + "_contactSensor";
 //    std::string goal="blackbox";
 
     ros::init(argc, argv, nodeName);
@@ -73,6 +77,7 @@ int main (int argc, char **argv)
     bool ready2 = false;
     bool graspPar1 = false;
     bool graspPar2 = false;
+    bool touch_param = false;
     double norm = 0.0;
 
     std::string grasp= "/grasp"+ robot_name;
@@ -99,7 +104,7 @@ int main (int argc, char **argv)
                 tf::Vector3 new_goal;
                 new_goal.setX(transformation.getOrigin().x());
                 new_goal.setY(transformation.getOrigin().y());
-                new_goal.setZ(transformation.getOrigin().z() - 0.005);
+                new_goal.setZ(transformation.getOrigin().z() - 0.00);
                 transformation.setOrigin(new_goal);
                 transformation.getOpenGLMatrix(matrix);
 
@@ -303,10 +308,10 @@ int main (int argc, char **argv)
             for (int k = 0; k < 4; k++)
                 qdot[k] = qdot_arma(k);
 
-            norm= arma::norm(error, 2);
+            norm = arma::norm(error, 2);
 
-            ROS_INFO("errore %f",norm);
-            if (norm < 0.005)
+            //ROS_INFO("errore %f",norm);
+            if (norm < 0.003)
             {
                 ros::param::set(grasp, true);
                 ros::param::get ("/graspRAUVI1",graspPar1);
@@ -314,13 +319,16 @@ int main (int argc, char **argv)
 
                 if (graspPar1 && graspPar2)
                 {
-                    ROS_INFO("chiudo");
+                    //ROS_INFO("chiudo");
+		            n.getParam("/touch", touch_param);
                     if (touch)
                     {
-                        qdot[4] = -0.1;
-			ros::Duration(0.5).sleep();
+			            //ROS_INFO("+++++++++++ %d", touch);
+                        qdot[4] = 0.0;
+			            //ros::Duration(0.5).sleep();
                         n.setParam("/touch", true);
-                        ROS_INFO("stop");
+                        //ROS_INFO("stop");
+			            //n.shutdown();
                     }
                     else
                     {
@@ -332,7 +340,8 @@ int main (int argc, char **argv)
             else
             {
                 ros::param::set(grasp, false);
-                ROS_INFO("apro");
+		touch = false;
+                //ROS_INFO("apro");
                 qdot[4] = 1.0;
 
             }

@@ -88,17 +88,30 @@ int main(int argc, char **argv) {
             nh.getParam("/xbox1", x);
             nh.getParam("/ybox1", y);
             nh.getParam("/zbox1", z);
+/*            if(touch)
+	    {
+		x = 0.0;
+		y = 1.0;
+		z = 0.0;
+            }*/
         }
         else if (robot_name == "RAUVI2")
         {
             nh.getParam("/xbox2", x);
             nh.getParam("/ybox2", y);
             nh.getParam("/zbox2", z);
+/*            if(touch)
+	    {
+		x = 0.0;
+		y = -1.0;
+		z = 0.0;
+            }*/
         }
-        if(touch)
-        {
-            z=z+1.0;
-        }
+            if(touch)
+	    {
+		nh.shutdown();
+            }
+
         nh.getParam("/roll", roll);
         nh.getParam("/pitch", pitch);
         nh.getParam("/yaw", yaw);
