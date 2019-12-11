@@ -81,7 +81,9 @@ int main(int argc, char **argv) {
     ros::param::set(ready, false);
 
     while (ros::ok()) {
-
+        nh.getParam("/roll", roll);
+        nh.getParam("/pitch", pitch);
+        nh.getParam("/yaw", yaw);
         nh.getParam("/touch", touch);
         if (robot_name == "RAUVI1")
         {
@@ -94,27 +96,26 @@ int main(int argc, char **argv) {
 		y = 1.0;
 		z = 0.0;
             }*/
+
         }
         else if (robot_name == "RAUVI2")
         {
             nh.getParam("/xbox2", x);
             nh.getParam("/ybox2", y);
             nh.getParam("/zbox2", z);
-/*            if(touch)
-	    {
-		x = 0.0;
-		y = -1.0;
-		z = 0.0;
-            }*/
-        }
             if(touch)
-	    {
+            {
+/*                x = -0.5;
+                y = -1.0;
+                z = 0.0;
+		yaw = 1.57;
+		pitch = 3.14;
+		roll = 0.0;*/
 		nh.shutdown();
             }
+        }
 
-        nh.getParam("/roll", roll);
-        nh.getParam("/pitch", pitch);
-        nh.getParam("/yaw", yaw);
+
 //        ROS_INFO("%f %f %f \n", x, y, z);
 //        ROS_INFO("%f %f %f", roll, pitch, yaw);
 

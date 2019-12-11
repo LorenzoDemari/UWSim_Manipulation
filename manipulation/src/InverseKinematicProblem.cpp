@@ -323,12 +323,12 @@ int main (int argc, char **argv)
 		            n.getParam("/touch", touch_param);
                     if (touch)
                     {
-			            //ROS_INFO("+++++++++++ %d", touch);
+//			            ROS_INFO("+++++++++++ %d", touch);
                         qdot[4] = 0.0;
-			            //ros::Duration(0.5).sleep();
-                        n.setParam("/touch", true);
-                        //ROS_INFO("stop");
-			            //n.shutdown();
+//			            ros::Duration(0.5).sleep();
+//                        n.setParam("/touch", true);
+//                        ROS_INFO("stop");
+//			            n.shutdown();
                     }
                     else
                     {
@@ -340,8 +340,8 @@ int main (int argc, char **argv)
             else
             {
                 ros::param::set(grasp, false);
-		touch = false;
-                //ROS_INFO("apro");
+		        touch = false;
+//                ROS_INFO("apro");
                 qdot[4] = 1.0;
 
             }
@@ -361,6 +361,12 @@ int main (int argc, char **argv)
             js.velocity.push_back(qdot[4]);
 
             velocity_pub.publish(js);
+
+            if (touch)
+            {
+                ros::Duration(2.0).sleep();
+                n.setParam("/touch", true);
+            }
 
 
         }

@@ -7,7 +7,19 @@ rosrun uwsim gotoAbsolutePose <currentPosition> <controlTopic> <xgoal> <ygoal> <
 
 rosrun uwsim gotoAbsolutePose /uwsim/girona500_odom_RAUVI1 /dataNavigator_G500RAUVI1 5 1 -10 3.14 0 0
 
-rosrun uwsim gotoAbsolutePose /uwsim/girona500_odom_RAUVI2 /dataNavigator_G500RAUVI2 5 -1 -10 3.14 0 0
+rosrun uwsim gotoAbsolutePose /uwsim/girona500_odom_RAUVI2 /dataNavigator_G500RAUVI2 0.5 -1 0 3.14 0 0
+
+
+
+
+<arg name="arg_name" default="desired_value"/>
+
+<node pkg="node_pkg" type="node_type" name="node_name" 
+      if="$(eval arg_name == 'desired_value')"/>
+
+<group if="$(eval arg('debug') ==0)">
+    <node pkg="xxx" type="yyy" name="yyy">
+  </group>
 ________________________________________________________________________________________________________________________________________________
 
 
