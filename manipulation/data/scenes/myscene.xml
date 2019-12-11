@@ -113,7 +113,7 @@
       </orientation>
     </objectPicker> -->
 
-    <ForceSensor>
+<!--    <ForceSensor>
       <name>finger_11</name>
       <target>part4_jaw1</target>
       <offsetp>
@@ -140,7 +140,7 @@
         <y>0</y>
         <z>0</z>
       </offsetr>
-    </ForceSensor>
+    </ForceSensor> -->
   </vehicle>
 
   <vehicle>
@@ -198,13 +198,13 @@
     </objectPicker> -->
 
     <objectPicker>
-      <name>picker_22</name>
+      <name>picker_21</name>
       <relativeTo>part4_jaw1</relativeTo>
       <range>0.1</range>
       <position>
         <x>0</x>
         <y>0</y>
-        <z>-0.04</z>
+        <z>-0.036</z>
       </position>
       <orientation>
         <r>0</r>
@@ -270,6 +270,30 @@
       <collisionShapeType> box </collisionShapeType>
     </physics>
   </object>
+
+<!--  <object>
+    <name> blackbox </name>
+    <file> objects/pegaprile.obj </file>
+    <position>
+      <x> 0</x>
+      <y> 0 </y>
+      <z> -11.25 </z>
+    </position>
+    <orientation>
+      <r>0</r>
+      <p>0</p>
+      <y>1.57</y>
+    </orientation>
+    <physics>
+      <mass> 15000 </mass>
+      <inertia> 
+        <x> 0 </x>
+        <y> 0 </y>
+        <z> 0 </z>
+      </inertia>
+      <collisionShapeType> cylinder </collisionShapeType>
+    </physics>
+  </object> -->
 
   <object>
     <name> blackbox1 </name>
@@ -381,16 +405,16 @@
 	<topic>/uwsim/RAUVI2_joint_state_command</topic>
 	<vehicleName> girona500_RAUVI2 </vehicleName>
     </ROSJointStateToArm>
-    <RangeSensorToROSRange>
+<!--    <RangeSensorToROSRange>
       <name>sonar</name>
       <topic> /uwsim/g500/range </topic>
       <rate>10</rate>
-    </RangeSensorToROSRange>
-    <contactSensorToROS>
-      <name>girona500_RAUVI1</name>
-      <topic>g500/RAUVI1_contactSensor</topic>
+    </RangeSensorToROSRange> -->
+<!--    <contactSensorToROS>
+      <name>girona500_RAUVI2</name>
+      <topic>g500/RAUVI2_contactSensor</topic>
       <rate> 100 </rate>
-    </contactSensorToROS>
+    </contactSensorToROS> -->
 <!--    <contactSensorToROS>
       <name>girona500_RAUVI2</name>
       <topic>g500/RAUVI2_contactSensor</topic>
