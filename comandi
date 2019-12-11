@@ -7,7 +7,7 @@ rosrun uwsim gotoAbsolutePose <currentPosition> <controlTopic> <xgoal> <ygoal> <
 
 rosrun uwsim gotoAbsolutePose /uwsim/girona500_odom_RAUVI1 /dataNavigator_G500RAUVI1 5 1 -10 3.14 0 0
 
-rosrun uwsim gotoAbsolutePose /uwsim/girona500_odom_RAUVI2 /dataNavigator_G500RAUVI2 0 -1 0 3.14 0 0
+rosrun uwsim gotoAbsolutePose /uwsim/girona500_odom_RAUVI2 /dataNavigator_G500RAUVI2 5 -1 -10 3.14 0 0
 ________________________________________________________________________________________________________________________________________________
 
 

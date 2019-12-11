@@ -41,7 +41,7 @@ int main (int argc, char **argv)
     std::string nodeName="InverseKinematicProblem_" + robot_name;
     std::string topic="/uwsim/" + robot_name + "_joint_state_command";
     std::string joint="girona500_" + robot_name;
-    std::string contact_topic = "/g500/ForceSensor";
+    std::string contact_topic = "/g500RAUVI2/ForceSensor2";
 //    std::string contact_topic = "g500/" + robot_name + "_contactSensor";
 //    std::string goal="blackbox";
 

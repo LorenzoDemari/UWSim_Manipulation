@@ -112,6 +112,35 @@
         <y>0</y>
       </orientation>
     </objectPicker> -->
+
+    <ForceSensor>
+      <name>finger_11</name>
+      <target>part4_jaw1</target>
+      <offsetp>
+        <x>0</x>
+        <y>0</y>
+        <z>0</z>
+      </offsetp>
+      <offsetr>
+        <x>0</x>
+        <y>0</y>
+        <z>0</z>
+      </offsetr>
+    </ForceSensor>
+    <ForceSensor>
+      <name>finger_12</name>
+      <target>part4_jaw2</target>
+      <offsetp>
+        <x>0</x>
+        <y>0</y>
+        <z>0</z>
+      </offsetp>
+      <offsetr>
+        <x>0</x>
+        <y>0</y>
+        <z>0</z>
+      </offsetr>
+    </ForceSensor>
   </vehicle>
 
   <vehicle>
@@ -135,7 +164,7 @@
       <y>-1.57 </y>
     </orientation>
 
-    <rangeSensor>
+<!--    <rangeSensor>
       <name>sonar</name>
       <relativeTo>part4_jaw1</relativeTo>
       <range>0.2</range>
@@ -150,12 +179,12 @@
         <p>-1.57</p>
         <y>0</y>
       </orientation>
-    </rangeSensor>
+    </rangeSensor> -->
 
 <!--    <objectPicker>
       <name>picker_21</name>
       <relativeTo>part4_base</relativeTo>
-      <range>0.136</range>
+      <range>0.137</range>
       <position>
         <x>0</x>
         <y>0</y>
@@ -175,7 +204,7 @@
       <position>
         <x>0</x>
         <y>0</y>
-        <z>-0.042</z>
+        <z>-0.04</z>
       </position>
       <orientation>
         <r>0</r>
@@ -183,8 +212,22 @@
         <y>0</y>
       </orientation>
     </objectPicker>
+<!--    <ForceSensor>
+      <name>finger_21</name>
+      <target>part4_jaw1</target>
+      <offsetp>
+        <x>0</x>
+        <y>0</y>
+        <z>0</z>
+      </offsetp>
+      <offsetr>
+        <x>0</x>
+        <y>0</y>
+        <z>0</z>
+      </offsetr>
+    </ForceSensor> -->
     <ForceSensor>
-      <name>dito1</name>
+      <name>finger_22</name>
       <target>part4_jaw2</target>
       <offsetp>
         <x>0</x>
@@ -196,7 +239,7 @@
         <y>0</y>
         <z>0</z>
       </offsetr>
-    </ForceSensor>
+    </ForceSensor> 
   </vehicle>
 
   <object>
@@ -348,14 +391,29 @@
       <topic>g500/RAUVI1_contactSensor</topic>
       <rate> 100 </rate>
     </contactSensorToROS>
-    <contactSensorToROS>
+<!--    <contactSensorToROS>
       <name>girona500_RAUVI2</name>
       <topic>g500/RAUVI2_contactSensor</topic>
       <rate> 100 </rate>
-    </contactSensorToROS>
+    </contactSensorToROS> -->
+<!--    <ForceSensorROS>
+      <name>finger_11</name>
+      <topic>g500RAUVI1/ForceSensor1</topic>
+      <rate>100</rate>
+    </ForceSensorROS>
     <ForceSensorROS>
-      <name>dito1</name>
-      <topic>g500/ForceSensor</topic>
+      <name>finger_12</name>
+      <topic>g500RAUVI1/ForceSensor2</topic>
+      <rate>100</rate>
+    </ForceSensorROS>
+    <ForceSensorROS>
+      <name>finger_21</name>
+      <topic>g500RAUVI2/ForceSensor1</topic>
+      <rate>100</rate>
+    </ForceSensorROS> -->
+    <ForceSensorROS>
+      <name>finger_22</name>
+      <topic>g500RAUVI2/ForceSensor2</topic>
       <rate>100</rate>
     </ForceSensorROS>
   </rosInterfaces>
