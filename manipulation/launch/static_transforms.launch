@@ -14,8 +14,8 @@
 	<arg name="frame_child_id2" default="goal2" />
 	<arg name="rate" default="1" />
 
-	<node name="goal1" pkg="tf" type="static_transform_publisher" respawn="false" output="screen" args="$(arg xgoal1) $(arg ygoal1) $(arg zgoal1) $(arg yawgoal) $(arg pitchgoal) $(arg rollgoal) $(arg frame_id) $(arg frame_child_id1) $(arg rate)" />
-	<node name="goal2" pkg="tf" type="static_transform_publisher" respawn="false" output="screen" args="$(arg xgoal2) $(arg ygoal2) $(arg zgoal2) $(arg yawgoal) $(arg pitchgoal) $(arg rollgoal) $(arg frame_id) $(arg frame_child_id2) $(arg rate)" />
+	<node name="goal_RAUVI1" pkg="tf" type="static_transform_publisher" respawn="false" output="screen" args="$(arg xgoal1) $(arg ygoal1) $(arg zgoal1) $(arg yawgoal) $(arg pitchgoal) $(arg rollgoal) $(arg frame_id) $(arg frame_child_id1) $(arg rate)" />
+	<node name="goal_RAUVI2" pkg="tf" type="static_transform_publisher" respawn="false" output="screen" args="$(arg xgoal2) $(arg ygoal2) $(arg zgoal2) $(arg yawgoal) $(arg pitchgoal) $(arg rollgoal) $(arg frame_id) $(arg frame_child_id2) $(arg rate)" />
 
 
 </launch>
