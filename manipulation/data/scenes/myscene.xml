@@ -181,10 +181,10 @@
       </orientation>
     </rangeSensor> -->
 
-<!--    <objectPicker>
+    <objectPicker>
       <name>picker_21</name>
       <relativeTo>part4_base</relativeTo>
-      <range>0.137</range>
+      <range>0.14</range>
       <position>
         <x>0</x>
         <y>0</y>
@@ -195,9 +195,9 @@
         <p>0</p>
         <y>0</y>
       </orientation>
-    </objectPicker> -->
+    </objectPicker>
 
-    <objectPicker>
+<!--    <objectPicker>
       <name>picker_21</name>
       <relativeTo>part4_jaw1</relativeTo>
       <range>0.1</range>
@@ -211,7 +211,7 @@
         <p>0</p>
         <y>0</y>
       </orientation>
-    </objectPicker>
+    </objectPicker> -->
 <!--    <ForceSensor>
       <name>finger_21</name>
       <target>part4_jaw1</target>

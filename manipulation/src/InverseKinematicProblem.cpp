@@ -310,8 +310,8 @@ int main (int argc, char **argv)
 
             norm = arma::norm(error, 2);
 
-            //ROS_INFO("errore %f",norm);
-            if (norm < 0.003)
+            ROS_INFO("errore %f",norm);
+            if (norm < 0.004)
             {
                 ros::param::set(grasp, true);
                 ros::param::get ("/graspRAUVI1",graspPar1);
