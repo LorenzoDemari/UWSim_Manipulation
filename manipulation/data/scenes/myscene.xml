@@ -71,14 +71,14 @@
       <joint> 0 </joint>
     </jointValues>
     <position>
-      <x> -5 </x>
-      <y> -5 </y>
-      <z> -4 </z>
+      <x> 2 </x>
+      <y> 2 </y>
+      <z> -9 </z>
     </position>
     <orientation>
       <r>3.1415</r>
       <p>0 </p>
-      <y>1.57 </y>
+      <y>-1.57 </y>
     </orientation>
 
 <!--    <objectPicker>
@@ -113,7 +113,7 @@
       </orientation>
     </objectPicker> -->
 
-<!--    <ForceSensor>
+    <ForceSensor>
       <name>finger_11</name>
       <target>part4_jaw1</target>
       <offsetp>
@@ -140,7 +140,7 @@
         <y>0</y>
         <z>0</z>
       </offsetr>
-    </ForceSensor> -->
+    </ForceSensor>
   </vehicle>
 
   <vehicle>
@@ -154,14 +154,14 @@
       <joint> 0 </joint>
     </jointValues>
     <position>
-      <x> 5</x>
-      <y> 5 </y>
-      <z> -4 </z>
+      <x> -2</x>
+      <y> 2 </y>
+      <z> -9 </z>
     </position>
     <orientation>
       <r>3.1415</r>
       <p>0 </p>
-      <y>-1.57 </y>
+      <y>1.57 </y>
     </orientation>
 
 <!--    <rangeSensor>
@@ -184,7 +184,7 @@
     <objectPicker>
       <name>picker_21</name>
       <relativeTo>part4_base</relativeTo>
-      <range>0.14</range>
+      <range>0.12</range>
       <position>
         <x>0</x>
         <y>0</y>
@@ -212,7 +212,7 @@
         <y>0</y>
       </orientation>
     </objectPicker> -->
-<!--    <ForceSensor>
+    <ForceSensor>
       <name>finger_21</name>
       <target>part4_jaw1</target>
       <offsetp>
@@ -225,7 +225,7 @@
         <y>0</y>
         <z>0</z>
       </offsetr>
-    </ForceSensor> -->
+    </ForceSensor>
     <ForceSensor>
       <name>finger_22</name>
       <target>part4_jaw2</target>
@@ -242,7 +242,7 @@
     </ForceSensor> 
   </vehicle>
 
-  <object>
+<!--  <object>
     <name> blackbox </name>
     <file> objects/blackbox_uib_trimesh.osg </file>
     <position>
@@ -269,9 +269,9 @@
       </inertia>
       <collisionShapeType> box </collisionShapeType>
     </physics>
-  </object>
+  </object> -->
 
-<!--  <object>
+  <object>
     <name> blackbox </name>
     <file> objects/pegaprile.obj </file>
     <position>
@@ -285,7 +285,7 @@
       <y>1.57</y>
     </orientation>
     <physics>
-      <mass> 15000 </mass>
+      <!-- <mass> 1 </mass> -->
       <inertia> 
         <x> 0 </x>
         <y> 0 </y>
@@ -293,7 +293,7 @@
       </inertia>
       <collisionShapeType> cylinder </collisionShapeType>
     </physics>
-  </object> -->
+  </object>
 
   <object>
     <name> blackbox1 </name>
@@ -420,7 +420,7 @@
       <topic>g500/RAUVI2_contactSensor</topic>
       <rate> 100 </rate>
     </contactSensorToROS> -->
-<!--    <ForceSensorROS>
+    <ForceSensorROS>
       <name>finger_11</name>
       <topic>g500RAUVI1/ForceSensor1</topic>
       <rate>100</rate>
@@ -434,7 +434,7 @@
       <name>finger_21</name>
       <topic>g500RAUVI2/ForceSensor1</topic>
       <rate>100</rate>
-    </ForceSensorROS> -->
+    </ForceSensorROS>
     <ForceSensorROS>
       <name>finger_22</name>
       <topic>g500RAUVI2/ForceSensor2</topic>

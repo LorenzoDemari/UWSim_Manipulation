@@ -316,6 +316,7 @@ int main (int argc, char **argv)
                 ros::param::set(grasp, true);
                 ros::param::get ("/graspRAUVI1",graspPar1);
                 ros::param::get ("/graspRAUVI2",graspPar2);
+                n.setParam("/touch", true);
 
                 if (graspPar1 && graspPar2)
                 {

@@ -14,6 +14,7 @@
 	<arg name="controlTopic1" default="/dataNavigator_G500RAUVI1" />
 	<arg name="controlTopic2" default="/dataNavigator_G500RAUVI2" />
 
+
 	<node name="task_RAUVI1" pkg="uwsim" type="gotoAbsolutePose" respawn="false" output="screen" args="$(arg poseTopic1) $(arg controlTopic1) $(arg x1) $(arg y1) $(arg z1) $(arg roll) $(arg pitch) $(arg yaw)" />
 	<node name="task_RAUVI2" pkg="uwsim" type="gotoAbsolutePose" respawn="false" output="screen" args="$(arg poseTopic2) $(arg controlTopic2) $(arg x2) $(arg y2) $(arg z2) $(arg roll) $(arg pitch) $(arg yaw)" />
 
