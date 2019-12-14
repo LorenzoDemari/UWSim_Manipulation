@@ -1,10 +1,10 @@
 <launch>
 
-	<arg name="xgoal1" default="0" />
-	<arg name="ygoal1" default="1" />
+	<arg name="xgoal1" default="1" />
+	<arg name="ygoal1" default="0" />
 	<arg name="zgoal1" default="-0.01" />
-	<arg name="xgoal2" default="0" />
-	<arg name="ygoal2" default="-1" />
+	<arg name="xgoal2" default="-1" />
+	<arg name="ygoal2" default="0" />
 	<arg name="zgoal2" default="-0.01" />
 	<arg name="yawgoal" default="0" />
 	<arg name="pitchgoal" default="0" />
