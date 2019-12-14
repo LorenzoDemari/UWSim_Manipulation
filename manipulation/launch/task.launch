@@ -1,0 +1,21 @@
+<launch>
+
+	<arg name="x1" default="0.45" />
+	<arg name="y1" default="1.0" />
+	<arg name="z1" default="0.0" />
+	<arg name="x2" default="0.45" />
+	<arg name="y2" default="-1.0" />
+	<arg name="z2" default="0.0" />
+	<arg name="roll" default="3.14" />
+	<arg name="pitch" default="0.0" />
+	<arg name="yaw" default="0.0" />
+	<arg name="poseTopic1" default="/uwsim/girona500_odom_RAUVI1" />
+	<arg name="poseTopic2" default="/uwsim/girona500_odom_RAUVI2" />
+	<arg name="controlTopic1" default="/dataNavigator_G500RAUVI1" />
+	<arg name="controlTopic2" default="/dataNavigator_G500RAUVI2" />
+
+	<node name="task_RAUVI1" pkg="uwsim" type="gotoAbsolutePose" respawn="false" output="screen" args="$(arg poseTopic1) $(arg controlTopic1) $(arg x1) $(arg y1) $(arg z1) $(arg roll) $(arg pitch) $(arg yaw)" />
+	<node name="task_RAUVI2" pkg="uwsim" type="gotoAbsolutePose" respawn="false" output="screen" args="$(arg poseTopic2) $(arg controlTopic2) $(arg x2) $(arg y2) $(arg z2) $(arg roll) $(arg pitch) $(arg yaw)" />
+
+
+</launch>
