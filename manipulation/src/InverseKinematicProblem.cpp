@@ -20,6 +20,8 @@
 
 bool touch = false;
 
+arma::Col<double> JacobianColumn(arma::Mat<double> j_transf_matrix, arma::Col<double> trasl_e);
+arma::Mat<double> InitTransfMatrix(tfScalar matrix[16]);
 void VersorLemma(arma::Mat<double> endeff, arma::Mat<double> goal, arma::Col<double> ang_error);
 void ContactCallback(geometry_msgs::WrenchStamped msg)
 {
@@ -34,16 +36,11 @@ int main (int argc, char **argv)
 {
     std::string robot_name(argv[1]);
     std::string goal(argv[2]);
-//    std::string controlTopic(argv[2]);
-//    std::string nodeName=controlTopic;
-//    nodeName.replace(0,6,"IKP_");
 
     std::string nodeName="InverseKinematicProblem_" + robot_name;
     std::string topic="/uwsim/" + robot_name + "_joint_state_command";
     std::string joint="girona500_" + robot_name;
     std::string contact_topic = "/g500RAUVI2/ForceSensor2";
-//    std::string contact_topic = "g500/" + robot_name + "_contactSensor";
-//    std::string goal="blackbox";
 
     ros::init(argc, argv, nodeName);
     ros::NodeHandle n;
@@ -52,7 +49,6 @@ int main (int argc, char **argv)
     tf::StampedTransform transformation;
     ros::Subscriber contact = n.subscribe(contact_topic, 1, ContactCallback);
     double qdot[5];
-
 
     tfScalar matrix[2];
 
@@ -70,8 +66,17 @@ int main (int argc, char **argv)
     arma::Col<double> angular_error(3);
     arma::Col<double> error(6);
     arma::Col<double> qdot_arma(4);
+    arma::Col<double> Jac1(6);
+    arma::Col<double> Jac2(6);
+    arma::Col<double> Jac3(6);
+    arma::Col<double> Jac4(6);
 
     arma::Mat<double> jacobian(6, 4, arma::fill::zeros);
+    arma::Mat<double> jacobian2(6, 4, arma::fill::zeros);
+
+    arma::Mat<double> Jac12(6, 2, arma::fill::zeros);
+    arma::Mat<double> Jac34(6, 2, arma::fill::zeros);
+
 
     bool ready1 = false;
     bool ready2 = false;
@@ -96,7 +101,6 @@ int main (int argc, char **argv)
 
         if (ready1 && ready2) {
 
-            //ros::Duration(1.0).sleep();
             try {
                 listener.waitForTransform(joint + "/kinematic_base", goal, ros::Time(0), ros::Duration(0.00005));
                 listener.lookupTransform(joint + "/kinematic_base", goal, ros::Time(0), transformation);
@@ -112,10 +116,6 @@ int main (int argc, char **argv)
                                    << matrix[1] << matrix[5] << 0 << matrix[13] << arma::endr
                                    << matrix[2] << matrix[6] << -1 << matrix[14] << arma::endr
                                    << matrix[3] << matrix[7] << matrix[11] << matrix[15] << arma::endr;
-//            goal_transf_matrix << matrix[0] << matrix[4] << matrix[8] << matrix[12] << arma::endr
-//                  << matrix[1] << matrix[5] << matrix[9] << matrix[13] << arma::endr
-//                  << matrix[2] << matrix[6] << matrix[10] << matrix[14] << arma::endr
-//                  << matrix[3] << matrix[7] << matrix[11] << matrix[15] << arma::endr;
 
                // arma::cout << goal_transf_matrix << arma::endl << arma::endl;
 
@@ -128,17 +128,12 @@ int main (int argc, char **argv)
             }
 
             try {
-                listener.waitForTransform(joint + "/kinematic_base", joint + "/end_effector", ros::Time(0),
-                                          ros::Duration(0.00005));
+                listener.waitForTransform(joint + "/kinematic_base", joint + "/end_effector", ros::Time(0), ros::Duration(0.00005));
                 listener.lookupTransform(joint + "/kinematic_base", joint + "/end_effector", ros::Time(0), transformation);
 
                 transformation.getOpenGLMatrix(matrix);
 
-                endeff_transf_matrix << matrix[0] << matrix[4] << matrix[8] << matrix[12] << arma::endr
-                                     << matrix[1] << matrix[5] << matrix[9] << matrix[13] << arma::endr
-                                     << matrix[2] << matrix[6] << matrix[10] << matrix[14] << arma::endr
-                                     << matrix[3] << matrix[7] << matrix[11] << matrix[15] << arma::endr;
-
+                endeff_transf_matrix = InitTransfMatrix(matrix);
             //    arma::cout << goal_transf_matrix << arma::endl << arma::endl;
 
                 trasl_e << endeff_transf_matrix(0, 3) << endeff_transf_matrix(1, 3) << endeff_transf_matrix(2, 3);
@@ -155,27 +150,10 @@ int main (int argc, char **argv)
 
                 transformation.getOpenGLMatrix(matrix);
 
-                j1_transf_matrix << matrix[0] << matrix[4] << matrix[8] << matrix[12] << arma::endr
-                                 << matrix[1] << matrix[5] << matrix[9] << matrix[13] << arma::endr
-                                 << matrix[2] << matrix[6] << matrix[10] << matrix[14] << arma::endr
-                                 << matrix[3] << matrix[7] << matrix[11] << matrix[15] << arma::endr;
+                j1_transf_matrix = InitTransfMatrix(matrix);
 
-             //   arma::cout << "part1" << arma::endl << j1_transf_matrix << arma::endl << arma::endl;
+                Jac1 = JacobianColumn(j1_transf_matrix, trasl_e);
 
-                arma::Col<double> ki_1(3);
-                ki_1 << j1_transf_matrix(0, 2) << j1_transf_matrix(1, 2) << j1_transf_matrix(2, 2);
-                for (int i = 0; i < 3; i++) {
-                    jacobian(i, 0) = j1_transf_matrix(i, 2);
-                }
-                arma::Col<double> trasl_1(3);
-                trasl_1 << j1_transf_matrix(0, 3) << j1_transf_matrix(1, 3) << j1_transf_matrix(2, 3);
-                arma::Col<double> trasl_diff_1(3);
-                trasl_diff_1 = trasl_e - trasl_1;
-                arma::Col<double> cross_prod_1(3);
-                cross_prod_1 = arma::cross(ki_1, trasl_diff_1);
-                for (int i = 3; i < 6; i++) {
-                    jacobian(i, 0) = cross_prod_1(i - 3);
-                }
                 //arma::cout << "cross_product" << arma::endl << cross_prod_1 << arma::endl << arma::endl;
 
             }
@@ -184,33 +162,14 @@ int main (int argc, char **argv)
             }
 
             try {
-                listener.waitForTransform(joint + "/kinematic_base", joint + "/part2", ros::Time(0),
-                                          ros::Duration(0.00005));
+                listener.waitForTransform(joint + "/kinematic_base", joint + "/part2", ros::Time(0), ros::Duration(0.00005));
                 listener.lookupTransform(joint + "/kinematic_base", joint + "/part2", ros::Time(0), transformation);
 
                 transformation.getOpenGLMatrix(matrix);
 
-                j2_transf_matrix << matrix[0] << matrix[4] << matrix[8] << matrix[12] << arma::endr
-                                 << matrix[1] << matrix[5] << matrix[9] << matrix[13] << arma::endr
-                                 << matrix[2] << matrix[6] << matrix[10] << matrix[14] << arma::endr
-                                 << matrix[3] << matrix[7] << matrix[11] << matrix[15] << arma::endr;
+                j2_transf_matrix = InitTransfMatrix(matrix);
 
-            //    arma::cout << "part2" << arma::endl << j2_transf_matrix << arma::endl << arma::endl;
-
-                arma::Col<double> ki_2(3);
-                ki_2 << j2_transf_matrix(0, 2) << j2_transf_matrix(1, 2) << j2_transf_matrix(2, 2);
-                for (int i = 0; i < 3; i++) {
-                    jacobian(i, 1) = j2_transf_matrix(i, 2);
-                }
-                arma::Col<double> trasl_2(3);
-                trasl_2 << j2_transf_matrix(0, 3) << j2_transf_matrix(1, 3) << j2_transf_matrix(2, 3);
-                arma::Col<double> trasl_diff_2(3);
-                trasl_diff_2 = trasl_e - trasl_2;
-                arma::Col<double> cross_prod_2(3);
-                cross_prod_2 = arma::cross(ki_2, trasl_diff_2);
-                for (int i = 3; i < 6; i++) {
-                    jacobian(i, 1) = cross_prod_2(i - 3);
-                }
+                Jac2 = JacobianColumn(j2_transf_matrix, trasl_e);
                 //arma::cout << "cross_product" << arma::endl << cross_prod_1 << arma::endl << arma::endl;
             }
             catch (tf::TransformException &ex100) {
@@ -223,27 +182,9 @@ int main (int argc, char **argv)
 
                 transformation.getOpenGLMatrix(matrix);
 
-                j3_transf_matrix << matrix[0] << matrix[4] << matrix[8] << matrix[12] << arma::endr
-                                 << matrix[1] << matrix[5] << matrix[9] << matrix[13] << arma::endr
-                                 << matrix[2] << matrix[6] << matrix[10] << matrix[14] << arma::endr
-                                 << matrix[3] << matrix[7] << matrix[11] << matrix[15] << arma::endr;
+                j3_transf_matrix = InitTransfMatrix(matrix);
 
-              //  arma::cout << "part3" << arma::endl << j3_transf_matrix << arma::endl << arma::endl;
-
-                arma::Col<double> ki_3(3);
-                ki_3 << j3_transf_matrix(0, 2) << j3_transf_matrix(1, 2) << j3_transf_matrix(2, 2);
-                for (int i = 0; i < 3; i++) {
-                    jacobian(i, 2) = j3_transf_matrix(i, 2);
-                }
-                arma::Col<double> trasl_3(3);
-                trasl_3 << j3_transf_matrix(0, 3) << j3_transf_matrix(1, 3) << j3_transf_matrix(2, 3);
-                arma::Col<double> trasl_diff_3(3);
-                trasl_diff_3 = trasl_e - trasl_3;
-                arma::Col<double> cross_prod_3(3);
-                cross_prod_3 = arma::cross(ki_3, trasl_diff_3);
-                for (int i = 3; i < 6; i++) {
-                    jacobian(i, 2) = cross_prod_3(i - 3);
-                }
+                Jac3 = JacobianColumn(j3_transf_matrix, trasl_e);
                 //arma::cout << "cross_product" << arma::endl << cross_prod_1 << arma::endl << arma::endl;
             }
             catch (tf::TransformException &ex100) {
@@ -251,33 +192,14 @@ int main (int argc, char **argv)
             }
 
             try {
-                listener.waitForTransform(joint + "/kinematic_base", joint + "/part4_base", ros::Time(0),
-                                          ros::Duration(0.00005));
+                listener.waitForTransform(joint + "/kinematic_base", joint + "/part4_base", ros::Time(0), ros::Duration(0.00005));
                 listener.lookupTransform(joint + "/kinematic_base", joint + "/part4_base", ros::Time(0), transformation);
 
                 transformation.getOpenGLMatrix(matrix);
 
-                j4_transf_matrix << matrix[0] << matrix[4] << matrix[8] << matrix[12] << arma::endr
-                                 << matrix[1] << matrix[5] << matrix[9] << matrix[13] << arma::endr
-                                 << matrix[2] << matrix[6] << matrix[10] << matrix[14] << arma::endr
-                                 << matrix[3] << matrix[7] << matrix[11] << matrix[15] << arma::endr;
+                j4_transf_matrix = InitTransfMatrix(matrix);
 
-              //  arma::cout << "part4" << arma::endl << j4_transf_matrix << arma::endl << arma::endl;
-
-                arma::Col<double> ki_4(3);
-                ki_4 << j4_transf_matrix(0, 2) << j4_transf_matrix(1, 2) << j4_transf_matrix(2, 2);
-                for (int i = 0; i < 3; i++) {
-                    jacobian(i, 3) = j4_transf_matrix(i, 2);
-                }
-                arma::Col<double> trasl_4(3);
-                trasl_4 << j4_transf_matrix(0, 3) << j4_transf_matrix(1, 3) << j4_transf_matrix(2, 3);
-                arma::Col<double> trasl_diff_4(3);
-                trasl_diff_4 = trasl_e - trasl_4;
-                arma::Col<double> cross_prod_4(3);
-                cross_prod_4 = arma::cross(ki_4, trasl_diff_4);
-                for (int i = 3; i < 6; i++) {
-                    jacobian(i, 3) = cross_prod_4(i - 3);
-                }
+                Jac4 = JacobianColumn(j4_transf_matrix, trasl_e);
                 //arma::cout << "cross_product" << arma::endl << cross_prod_1 << arma::endl << arma::endl;
             }
             catch (tf::TransformException &ex100) {
@@ -285,7 +207,12 @@ int main (int argc, char **argv)
             }
 
 
-            //arma::cout << "jacobian" << arma::endl << jacobian << arma::endl << arma::endl;
+            Jac12 = join_horiz(Jac1,Jac2);
+            Jac34 = join_horiz(Jac3,Jac4);
+            jacobian = join_horiz(Jac12, Jac34);
+
+
+//            arma::cout << "jacobian" << arma::endl << jacobian << arma::endl << arma::endl;
 
 
             VersorLemma(endeff_transf_matrix, goal_transf_matrix, angular_error);
@@ -298,9 +225,6 @@ int main (int argc, char **argv)
 
             for (int j = 3; j < 6; j++)
                 error(j) = linear_error(j - 3);
-
-
-
 
 
             qdot_arma = pinv(jacobian) * error;
@@ -383,6 +307,37 @@ int main (int argc, char **argv)
 
 }
 
+arma::Mat<double> InitTransfMatrix(tfScalar matrix[16]){
+    arma::Mat<double> transf_matrix(4, 4, arma::fill::eye);
+
+    transf_matrix << matrix[0] << matrix[4] << matrix[8] << matrix[12] << arma::endr
+                         << matrix[1] << matrix[5] << matrix[9] << matrix[13] << arma::endr
+                         << matrix[2] << matrix[6] << matrix[10] << matrix[14] << arma::endr
+                         << matrix[3] << matrix[7] << matrix[11] << matrix[15] << arma::endr;
+
+    return transf_matrix;
+}
+
+arma::Col<double> JacobianColumn(arma::Mat<double> j_transf_matrix, arma::Col<double> trasl_e){
+    arma::Col<double> column(6);
+    arma::Col<double> ki(3);
+    arma::Col<double> trasl(3);
+    arma::Col<double> trasl_diff(3);
+    arma::Col<double> cross_prod(3);
+
+    ki << j_transf_matrix(0, 2) << j_transf_matrix(1, 2) << j_transf_matrix(2, 2);
+/*    for (int i = 0; i < 3; i++) {
+        jacobian(i, 3) = j_transf_matrix(i, 2);
+    }*/
+    trasl << j_transf_matrix(0, 3) << j_transf_matrix(1, 3) << j_transf_matrix(2, 3);
+    trasl_diff = trasl_e - trasl;
+    cross_prod = arma::cross(ki, trasl_diff);
+/*    for (int i = 3; i < 6; i++) {
+        jacobian(i, 3) = cross_prod(i - 3);
+    }*/
+    column << ki(0) << ki(1) << ki(2) << cross_prod(0) << cross_prod(1) << cross_prod(2);
+    return column;
+}
 
 void VersorLemma(arma::Mat<double> endeff, arma::Mat<double> goal, arma::Col<double> ang_error)
 {

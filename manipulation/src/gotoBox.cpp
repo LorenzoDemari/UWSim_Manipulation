@@ -115,10 +115,6 @@ int main(int argc, char **argv) {
             }
         }
 
-
-//        ROS_INFO("%f %f %f \n", x, y, z);
-//        ROS_INFO("%f %f %f", roll, pitch, yaw);
-
         T.makeTranslate(x,y,z);
         Rx.makeRotate(roll,1,0,0);
         Ry.makeRotate(pitch,0,1,0);
@@ -166,13 +162,6 @@ int main(int argc, char **argv) {
 	bool pitch_check = actual_pose.getRotation().y()==pitch;
 	bool yaw_check = actual_pose.getRotation().z()==yaw;
 
-      //  ROS_INFO("%d %d %d %d %d %d\n", x_check, y_check, z_check);//, roll_check, pitch_check, yaw_check);
-
-/*
-	ROS_INFO("ROLL  %f %f", actual_pose.getRotation().x(), roll);
-	ROS_INFO("PITCH  %f %f", actual_pose.getRotation().y(), pitch);
-	ROS_INFO("YAW  %f %f", actual_pose.getRotation().z(), yaw);
-*/
 
 
 	if(x_check && y_check && z_check ) // && roll_check && pitch_check && yaw_check)
