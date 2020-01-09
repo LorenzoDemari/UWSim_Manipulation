@@ -1,5 +1,7 @@
 Luca Cartosio, Lorenzo De Mari
 
+----Cooperative Manipulation for a common task-------
+
 README
 
 Repository contents:
@@ -13,12 +15,22 @@ The folders contain images of the experiment or the software architecture.
 
 The Complete_video.org shows a record of the complete experiment.
 
-In the manipulation package there is the developed code.
+In the manipulation package there is the code developed, in particular the nodes:
+-InverseKinematicProblem.cpp
+-goalDetection.cpp
+-gotoBox.cpp
 
 ********************************************************************************************
 HOW TO SET THE ENVIRONMENT
 
-1. in the file /uwsim/data/scenes/g500ARM5.urdf
+In the operating system Ubuntu 16.4:
+-Install ROS kinetic following the instructions at the link http://wiki.ros.org/kinetic/Installation
+-Then install UWSim simulator following the instractions at the link http://www.irs.uji.es/uwsim/wiki/index.php?title=Installing_UWSim
+
+-----------------------------
+
+2. in the file /uwsim/data/scenes/g500ARM5.urdf
+
 add the following lines to <link name="part4_jaw1"> and <link name="part4_jaw2"> as shown in inertial.png
 
 <inertial>
@@ -28,13 +40,14 @@ add the following lines to <link name="part4_jaw1"> and <link name="part4_jaw2">
 
 -------------------------------
 
-2. copy the file myscene.xml contained in manipulation/data/scenes in the folder uwsim/data/scenes
+3. copy the file myscene.xml contained in manipulation/data/scenes in the folder uwsim/data/scenes
 
 -------------------------------
 
-3.  copy the file pegaprile.obj contained in manipulation/data/objects in the folder /home/$user$/.uwsim/data/objects
+4.  copy the file pegaprile.obj contained in manipulation/data/objects in the folder /home/$user$/.uwsim/data/objects
 
 ********************************************************************************************
+
 HOW TO RUN THE CODE
 
 Open 4 terminals:
