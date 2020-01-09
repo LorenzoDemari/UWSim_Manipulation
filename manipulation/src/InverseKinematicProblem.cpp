@@ -128,7 +128,7 @@ int main (int argc, char **argv)
             }
 
             try {
-                listener.waitForTransform(joint + "/kinematic_base", joint + "/end_effector", ros::Time(0), ros::Duration(0.00005));
+                listener.waitForTransform(joint + "/kinematic_base", joint + "/end_effector", ros::Time(0),ros::Duration(0.00005));
                 listener.lookupTransform(joint + "/kinematic_base", joint + "/end_effector", ros::Time(0), transformation);
 
                 transformation.getOpenGLMatrix(matrix);
