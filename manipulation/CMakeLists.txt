@@ -22,7 +22,7 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   sensor_msgs
   tf
-  #underwater_sensor_msgs
+  underwater_sensor_msgs
   urdf
   xacro
 )
