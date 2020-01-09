@@ -45,7 +45,7 @@ void vehiclePoseCallback(const nav_msgs::Odometry& odom) {
 int main(int argc, char **argv) {
 
     if (argc < 2) {
-        std::cerr << "USAGE: " << argv[0] << " <robotName>"<< std::endl;
+        std::cerr << "USAGE: " << argv[0] << " <robotName>" << "<goalName" << std::endl;
         return 0;
     }
 
@@ -53,6 +53,7 @@ int main(int argc, char **argv) {
     std::string robot_name(argv[1]);
     std::string controlTopic = "/dataNavigator_G500" + robot_name;
     std::string poseTopic = "/uwsim/girona500_odom_" + robot_name;
+    std::string goal_name(argv[2]);
 	double x = 0.0;
 	double y = 0.0;
 	double z = 0.0;
@@ -81,38 +82,17 @@ int main(int argc, char **argv) {
     ros::param::set(ready, false);
 
     while (ros::ok()) {
-        nh.getParam("/roll", roll);
-        nh.getParam("/pitch", pitch);
-        nh.getParam("/yaw", yaw);
-        nh.getParam("/touch", touch);
-        if (robot_name == "RAUVI1")
-        {
-            nh.getParam("/xbox1", x);
-            nh.getParam("/ybox1", y);
-            nh.getParam("/zbox1", z);
-/*            if(touch)
-	    {
-		x = 0.0;
-		y = 1.0;
-		z = 0.0;
-            }*/
+        nh.getParam("/" + goal_name + "x", x);
+        nh.getParam("/" + goal_name + "y", y);
+        nh.getParam("/" + goal_name + "z", z);
+        nh.getParam("/" + goal_name + "roll", roll);
+        nh.getParam("/" + goal_name + "pitch", pitch);
+        nh.getParam("/" + goal_name + "yaw", yaw);
+        nh.getParam("/touch" + robot_name, touch);
 
-        }
-        else if (robot_name == "RAUVI2")
+        if(touch)
         {
-            nh.getParam("/xbox2", x);
-            nh.getParam("/ybox2", y);
-            nh.getParam("/zbox2", z);
-            if(touch)
-            {
-/*                x = -0.5;
-                y = -1.0;
-                z = 0.0;
-		yaw = 1.57;
-		pitch = 3.14;
-		roll = 0.0;*/
-		nh.shutdown();
-            }
+            nh.shutdown();
         }
 
         T.makeTranslate(x,y,z);
@@ -152,23 +132,21 @@ int main(int argc, char **argv) {
 
         try
         {
-	listener.waitForTransform("/world", "girona500_" + robot_name +"/base_link", ros::Time(0),ros::Duration(0.00005));
-	listener.lookupTransform("/world", "girona500_" + robot_name +"/base_link", ros::Time(0), actual_pose);
+            listener.waitForTransform("/world", "girona500_" + robot_name +"/base_link", ros::Time(0),ros::Duration(0.00005));
+            listener.lookupTransform("/world", "girona500_" + robot_name +"/base_link", ros::Time(0), actual_pose);
 
-	bool x_check = actual_pose.getOrigin().x()>x-0.01 && actual_pose.getOrigin().x()<x+0.01;
-	bool y_check = actual_pose.getOrigin().y()>y-0.01 && actual_pose.getOrigin().y()<y+0.01;
-	bool z_check = actual_pose.getOrigin().z()>z-0.01 && actual_pose.getOrigin().z()<z+0.01;
-	bool roll_check = actual_pose.getRotation().x()==roll;
-	bool pitch_check = actual_pose.getRotation().y()==pitch;
-	bool yaw_check = actual_pose.getRotation().z()==yaw;
+            bool x_check = actual_pose.getOrigin().x()>x-0.01 && actual_pose.getOrigin().x()<x+0.01;
+            bool y_check = actual_pose.getOrigin().y()>y-0.01 && actual_pose.getOrigin().y()<y+0.01;
+            bool z_check = actual_pose.getOrigin().z()>z-0.01 && actual_pose.getOrigin().z()<z+0.01;
+            bool roll_check = actual_pose.getRotation().x()==roll;
+            bool pitch_check = actual_pose.getRotation().y()==pitch;
+            bool yaw_check = actual_pose.getRotation().z()==yaw;
 
 
-
-	if(x_check && y_check && z_check ) // && roll_check && pitch_check && yaw_check)
-	{
-	    ros::param::set(ready, true);
-	}
-
+            if(x_check && y_check && z_check ) // && roll_check && pitch_check && yaw_check)
+            {
+                ros::param::set(ready, true);
+            }
 
         }
         catch (tf::TransformException &ex100) {

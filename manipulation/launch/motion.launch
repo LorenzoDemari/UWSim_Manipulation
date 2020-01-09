@@ -9,8 +9,8 @@
 
 
 	<node name="goalsDetection" pkg="manipulation" type="goalDetection" respawn="false" output="screen" />
-	<node name="goToGoal_RAUVI1" pkg="manipulation" type="gotoBox" respawn="false" output="screen" args="$(arg name1)" />
-	<node name="goToGoal_RAUVI2" pkg="manipulation" type="gotoBox" respawn="false" output="screen" args="$(arg name2)" />
+	<node name="goToGoal_RAUVI1" pkg="manipulation" type="gotoBox" respawn="false" output="screen" args="$(arg name1) $(arg goal1)" />
+	<node name="goToGoal_RAUVI2" pkg="manipulation" type="gotoBox" respawn="false" output="screen" args="$(arg name2) $(arg goal2)" />
 	
 	<node name="inverseKinematicProblem_RAUVI1" pkg="manipulation" type="InverseKinematicProblem" respawn="false" output="screen" args="$(arg name1) $(arg goal1)" />
 	<node name="inverseKinematicProblem_RAUVI2" pkg="manipulation" type="InverseKinematicProblem" respawn="false" output="screen" args="$(arg name2) $(arg goal2)" />

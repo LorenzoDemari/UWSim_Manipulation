@@ -18,17 +18,28 @@
 #include "geometry_msgs/WrenchStamped.h"
 //#include <asdl.h>
 
-bool touch = false;
+bool touch1 = false;
+bool touch2 = false;
+
 
 arma::Col<double> JacobianColumn(arma::Mat<double> j_transf_matrix, arma::Col<double> trasl_e);
 arma::Mat<double> InitTransfMatrix(tfScalar matrix[16]);
 void VersorLemma(arma::Mat<double> endeff, arma::Mat<double> goal, arma::Col<double> ang_error);
-void ContactCallback(geometry_msgs::WrenchStamped msg)
+void ContactCallback1(geometry_msgs::WrenchStamped msg)
 {
 	//ROS_INFO("***************************** %f", msg.range);
     if (msg.wrench.force.x != 0)
     {
-        touch = true;
+        touch1 = true;
+    }
+}
+
+void ContactCallback2(geometry_msgs::WrenchStamped msg)
+{
+    //ROS_INFO("***************************** %f", msg.range);
+    if (msg.wrench.force.x != 0)
+    {
+        touch2 = true;
     }
 }
 
@@ -40,14 +51,17 @@ int main (int argc, char **argv)
     std::string nodeName="InverseKinematicProblem_" + robot_name;
     std::string topic="/uwsim/" + robot_name + "_joint_state_command";
     std::string joint="girona500_" + robot_name;
-    std::string contact_topic = "/g500RAUVI2/ForceSensor2";
+    std::string contact_topic1 = "/g500" + robot_name + "/ForceSensor1";
+    std::string contact_topic2 = "/g500" + robot_name + "/ForceSensor2";
 
     ros::init(argc, argv, nodeName);
     ros::NodeHandle n;
 
     tf::TransformListener listener;
     tf::StampedTransform transformation;
-    ros::Subscriber contact = n.subscribe(contact_topic, 1, ContactCallback);
+    ros::Subscriber contact1 = n.subscribe(contact_topic1, 1, ContactCallback1);
+    ros::Subscriber contact2 = n.subscribe(contact_topic2, 1, ContactCallback2);
+
     double qdot[5];
 
     tfScalar matrix[2];
@@ -240,20 +254,13 @@ int main (int argc, char **argv)
                 ros::param::set(grasp, true);
                 ros::param::get ("/graspRAUVI1",graspPar1);
                 ros::param::get ("/graspRAUVI2",graspPar2);
-                n.setParam("/touch", true);
 
                 if (graspPar1 && graspPar2)
                 {
                     //ROS_INFO("chiudo");
-		            n.getParam("/touch", touch_param);
-                    if (touch)
+                    if (touch1 && touch2)
                     {
-//			            ROS_INFO("+++++++++++ %d", touch);
                         qdot[4] = 0.0;
-//			            ros::Duration(0.5).sleep();
-//                        n.setParam("/touch", true);
-//                        ROS_INFO("stop");
-//			            n.shutdown();
                     }
                     else
                     {
@@ -265,10 +272,9 @@ int main (int argc, char **argv)
             else
             {
                 ros::param::set(grasp, false);
-		        touch = false;
-//                ROS_INFO("apro");
+		        touch1 = false;
+                touch2 = false;
                 qdot[4] = 1.0;
-
             }
 
 
@@ -287,10 +293,10 @@ int main (int argc, char **argv)
 
             velocity_pub.publish(js);
 
-            if (touch)
+            if (touch1 && touch2)
             {
                 ros::Duration(2.0).sleep();
-                n.setParam("/touch", true);
+                n.setParam("/touch" + robot_name, true);
             }
 
 
@@ -326,15 +332,11 @@ arma::Col<double> JacobianColumn(arma::Mat<double> j_transf_matrix, arma::Col<do
     arma::Col<double> cross_prod(3);
 
     ki << j_transf_matrix(0, 2) << j_transf_matrix(1, 2) << j_transf_matrix(2, 2);
-/*    for (int i = 0; i < 3; i++) {
-        jacobian(i, 3) = j_transf_matrix(i, 2);
-    }*/
+
     trasl << j_transf_matrix(0, 3) << j_transf_matrix(1, 3) << j_transf_matrix(2, 3);
     trasl_diff = trasl_e - trasl;
     cross_prod = arma::cross(ki, trasl_diff);
-/*    for (int i = 3; i < 6; i++) {
-        jacobian(i, 3) = cross_prod(i - 3);
-    }*/
+
     column << ki(0) << ki(1) << ki(2) << cross_prod(0) << cross_prod(1) << cross_prod(2);
     return column;
 }
