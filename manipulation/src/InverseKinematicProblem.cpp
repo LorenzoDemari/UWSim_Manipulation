@@ -16,7 +16,6 @@
 #include <sensor_msgs/JointState.h>
 #include "sensor_msgs/Range.h"
 #include "geometry_msgs/WrenchStamped.h"
-//#include <asdl.h>
 
 bool touch1 = false;
 bool touch2 = false;
@@ -27,7 +26,6 @@ arma::Mat<double> InitTransfMatrix(tfScalar matrix[16]);
 void VersorLemma(arma::Mat<double> endeff, arma::Mat<double> goal, arma::Col<double> ang_error);
 void ContactCallback1(geometry_msgs::WrenchStamped msg)
 {
-	//ROS_INFO("***************************** %f", msg.range);
     if (msg.wrench.force.x != 0)
     {
         touch1 = true;
@@ -36,7 +34,6 @@ void ContactCallback1(geometry_msgs::WrenchStamped msg)
 
 void ContactCallback2(geometry_msgs::WrenchStamped msg)
 {
-    //ROS_INFO("***************************** %f", msg.range);
     if (msg.wrench.force.x != 0)
     {
         touch2 = true;
@@ -131,11 +128,7 @@ int main (int argc, char **argv)
                                    << matrix[2] << matrix[6] << -1 << matrix[14] << arma::endr
                                    << matrix[3] << matrix[7] << matrix[11] << matrix[15] << arma::endr;
 
-               // arma::cout << goal_transf_matrix << arma::endl << arma::endl;
-
                 trasl_g << goal_transf_matrix(0, 3) << goal_transf_matrix(1, 3) << goal_transf_matrix(2, 3);
-
-
             }
             catch (tf::TransformException &ex100) {
                 ROS_ERROR("%s", ex100.what());
@@ -148,10 +141,8 @@ int main (int argc, char **argv)
                 transformation.getOpenGLMatrix(matrix);
 
                 endeff_transf_matrix = InitTransfMatrix(matrix);
-            //    arma::cout << goal_transf_matrix << arma::endl << arma::endl;
 
                 trasl_e << endeff_transf_matrix(0, 3) << endeff_transf_matrix(1, 3) << endeff_transf_matrix(2, 3);
-
             }
             catch (tf::TransformException &ex100) {
                 ROS_ERROR("%s", ex100.what());
@@ -167,9 +158,6 @@ int main (int argc, char **argv)
                 j1_transf_matrix = InitTransfMatrix(matrix);
 
                 Jac1 = JacobianColumn(j1_transf_matrix, trasl_e);
-
-                //arma::cout << "cross_product" << arma::endl << cross_prod_1 << arma::endl << arma::endl;
-
             }
             catch (tf::TransformException &ex100) {
                 ROS_ERROR("%s", ex100.what());
@@ -184,7 +172,6 @@ int main (int argc, char **argv)
                 j2_transf_matrix = InitTransfMatrix(matrix);
 
                 Jac2 = JacobianColumn(j2_transf_matrix, trasl_e);
-                //arma::cout << "cross_product" << arma::endl << cross_prod_1 << arma::endl << arma::endl;
             }
             catch (tf::TransformException &ex100) {
                 ROS_ERROR("%s", ex100.what());
@@ -199,7 +186,6 @@ int main (int argc, char **argv)
                 j3_transf_matrix = InitTransfMatrix(matrix);
 
                 Jac3 = JacobianColumn(j3_transf_matrix, trasl_e);
-                //arma::cout << "cross_product" << arma::endl << cross_prod_1 << arma::endl << arma::endl;
             }
             catch (tf::TransformException &ex100) {
                 ROS_ERROR("%s", ex100.what());
@@ -214,7 +200,6 @@ int main (int argc, char **argv)
                 j4_transf_matrix = InitTransfMatrix(matrix);
 
                 Jac4 = JacobianColumn(j4_transf_matrix, trasl_e);
-                //arma::cout << "cross_product" << arma::endl << cross_prod_1 << arma::endl << arma::endl;
             }
             catch (tf::TransformException &ex100) {
                 ROS_ERROR("%s", ex100.what());
@@ -224,9 +209,6 @@ int main (int argc, char **argv)
             Jac12 = join_horiz(Jac1,Jac2);
             Jac34 = join_horiz(Jac3,Jac4);
             jacobian = join_horiz(Jac12, Jac34);
-
-
-//            arma::cout << "jacobian" << arma::endl << jacobian << arma::endl << arma::endl;
 
 
             VersorLemma(endeff_transf_matrix, goal_transf_matrix, angular_error);
@@ -257,7 +239,6 @@ int main (int argc, char **argv)
 
                 if (graspPar1 && graspPar2)
                 {
-                    //ROS_INFO("chiudo");
                     if (touch1 && touch2)
                     {
                         qdot[4] = 0.0;
@@ -301,8 +282,6 @@ int main (int argc, char **argv)
 
 
         }
-
-
 
         ros::spinOnce();
 

@@ -20,8 +20,6 @@ int main (int argc, char **argv)
     ros::NodeHandle n;
 
     tf::TransformListener listener;
-//    tf::TransformBroadcaster goal1;
-//    tf::TransformBroadcaster goal2;
 
     tf::StampedTransform BwrtW1;
     tf::StampedTransform BwrtW2;
@@ -48,8 +46,6 @@ int main (int argc, char **argv)
     tfScalar matrix[2];
 
     arma::Mat<double> goal_transf_matrix(4, 4, arma::fill::eye);
-    //double d = det(goal_transf_matrix);
-    //ROS_INFO("%f", d);
 
     ros::Rate rate(10.0);
 
